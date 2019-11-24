@@ -1,0 +1,8 @@
+.greybtn,.redbtn{
+    padding-left:0px;
+    padding-right:0px;
+    border:1px solid black;
+}
+.redbtn{
+    background-color: rgba(255, 0, 0, 0.700);
+}
