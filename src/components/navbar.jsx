@@ -6,7 +6,7 @@ class Navbar extends Component {
         return (
                 <ul class="navigation">
                     <li><a href="/home">Home</a></li>
-                    <li><a href="#">Shop</a></li>
+                    <li><a href="shop">Shop</a></li>
                     <li><a href="/login">Login</a></li>
                     <li><a href="#">Cart</a></li>
                 </ul>

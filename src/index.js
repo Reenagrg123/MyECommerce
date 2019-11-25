@@ -11,6 +11,7 @@ import AddProducts from './components/addproducts';
 import ViewProducts from './components/viewproducts';
 import Test from './components/test';
 import EachProduct from './components/eachproduct';
+import Shop from './components/shop/main';
 
 // ReactDOM.render(<NavBar/>, document.getElementById('nav-bar'));
 
@@ -29,6 +30,7 @@ const routing=(
             <Route path="/addProducts" component={AddProducts}/>
             <Route path="/viewProducts" component={ViewProducts}/>
             <Route path="/eachproduct" component={EachProduct}/>
+            <Route path="/shop" component={Shop}/>
 
         </div>
     </Router>

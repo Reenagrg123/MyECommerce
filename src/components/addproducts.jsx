@@ -1,21 +1,24 @@
 import React, { Component } from "react";
 import "./addproducts.css";
 import "./inputs.css";
+import nextId from "react-id-generator";
+import {withRouter,Redirect} from 'react-router-dom';
 // import ViewProduct from "./viewproducts";
 
 class AddProducts extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
-      productId:"",
+      productId: "",
       category: "",
       productName: "",
       quantity: "",
       price: "",
-      selectedFile:""
+      selectedFile: "",
+      isItemAdded:false
     };
   }
-
 
   handleChange = event => {
     let name = event.target.name;
@@ -23,60 +26,64 @@ class AddProducts extends Component {
     this.setState({ [name]: value });
   };
 
-  handleChangeFile=(event)=>{
-    var file=event.target.files[0]['name'];
+  handleChangeFile = event => {
+    var file = event.target.files[0]["name"];
     // console.log(file);
-    this.setState({selectedFile:file});
-  }
+    this.setState({ selectedFile: file });
+  };
 
   handleSubmit = event => {
-    // console.log("event:",event.target.value);
     event.preventDefault();
+    var productId = localStorage.getItem("productId");
+    localStorage.setItem("productId", ++productId);
+    this.setState({ productId: productId });
+    
     var productsData = JSON.parse(localStorage.getItem("products"));
     console.log("Storage data: ", productsData);
-
-    var formData = this.state;
-
-    console.log("Form data: ", formData);
 
     var tempData = [];
 
     if (productsData == null) {
       console.log("first item");
-      localStorage.setItem("products", JSON.stringify(formData));
+      localStorage.setItem("products", JSON.stringify(this.state));
     } else {
       console.log("After first item");
 
       for (let i = 0; i < productsData.length; i++) {
         tempData.push(productsData[i]);
       }
-      tempData.push(formData);
-      console.log(tempData);
+      tempData.push(this.state);
       localStorage.setItem("products", JSON.stringify(tempData));
     }
 
-    this.setState({ isItemAdded: true });
     alert("Product added successfully");
+    // this.props.history.push('/admin');
+    // this.setState({isItemAdded:true});
 
-    
+
   };
 
   render() {
+    if(this.state.isItemAdded==true){
+      return(<Redirect to="/admin"/>)
+    }
+    else{
     return (
       <React.Fragment>
+        <br></br>
         <h2>
           <center>
             <b>
-              <u>Add Items</u>
+              <u>Add Product</u>
             </b>
           </center>
         </h2>
-        <form onSubmit={this.handleSubmit}>
+        <form className="form" onSubmit={this.handleSubmit}>
           <label>
             <b>Category</b>
           </label>
           <select class="textbox" name="category" onChange={this.handleChange}>
-            <option value="Men">Men</option>
+            <option value="Men" selected="selected">Men</option>
             <option value="Women">Women </option>
             <option value="Footwear">Footwear</option>
             <option value="Electronics">Electronics</option>
@@ -87,7 +94,7 @@ class AddProducts extends Component {
           </label>
           <input
             type="text"
-            class="textbox"
+            className="textbox"
             name="productName"
             placeholder="Enter product name"
             onChange={this.handleChange}
@@ -98,7 +105,7 @@ class AddProducts extends Component {
           </label>
           <input
             type="number"
-            class="textbox"
+            className="textbox"
             name="quantity"
             placeholder="Enter quantity"
             onChange={this.handleChange}
@@ -109,23 +116,32 @@ class AddProducts extends Component {
           </label>
           <input
             type="text"
-            class="textbox"
+            className="textbox"
             name="price"
             placeholder="Enter price"
             onChange={this.handleChange}
           ></input>
-          <br></br><br></br>
-          <label><b>Select the product image:</b></label>
           <br></br>
-           <input type="file" name="file" onChange={this.handleChangeFile}></input>
-           <br></br><br></br>
-          <button type="Add Item" class="button">
+          
+          <label>
+            <b>Select the product image:</b>
+          </label>
+          <br></br><br></br>
+          <input
+            type="file"
+            name="file"
+            onChange={this.handleChangeFile}
+          ></input>
+          <br></br>
+          <br></br>
+          <button type="Add Item" className="button">
             Add Item
           </button>
         </form>
       </React.Fragment>
     );
   }
+}
 }
 
 export default AddProducts;

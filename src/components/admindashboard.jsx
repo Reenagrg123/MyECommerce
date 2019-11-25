@@ -8,14 +8,14 @@ import ViewProducts from "./viewproducts";
 class AdminDashboard extends Component {
   state = {
     isClickedAddItems: false,
-    isClickedAddItems: false
+    isClickedViewItems: false
   };
 
   handleClick = event => {
     console.log(event.target.name);
-    if (event.target.name == "addItems") {
+    if (event.target.name == "addProducts") {
       this.setState({ isClickedAddItems: true });
-    } else if (event.target.name == "viewItems") {
+    } else if (event.target.name == "viewProducts") {
       this.setState({ isClickedViewItems: true });
     }
   };
@@ -40,15 +40,15 @@ class AdminDashboard extends Component {
               <input
                 type="button"
                 class="button"
-                name="addItems"
-                value="Add Items"
+                name="addProducts"
+                value="Add Product"
                 onClick={this.handleClick}
               ></input>
               <input
                 type="button"
                 class="button"
-                value="View Items"
-                name="viewItems"
+                value="View Products"
+                name="viewProducts"
                 onClick={this.handleClick}
               ></input>
             </div>

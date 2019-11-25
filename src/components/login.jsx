@@ -55,8 +55,8 @@ class Login extends Component {
       return <Redirect to='/admin' />;
     } else {
       return (
-        <form class="login" onSubmit={this.handleSubmit}>
-          <div class="container">
+        <form className="form" onSubmit={this.handleSubmit}>
+          <div className="container">
             <h5>
               <b>
                 <center>Admin Login</center>
@@ -95,7 +95,7 @@ class Login extends Component {
             ></input>
             <br></br>
             <br></br>
-            <button type="submit" class="button">
+            <button type="submit" id="loginBtn" className="button ">
               Login
             </button>
           </div>
