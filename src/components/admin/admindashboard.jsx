@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import "./admindashboard.css";
 import AddProducts from "./addproducts";
-import "./inputs.css";
+import "../inputs.css";
 import ViewProducts from "./viewproducts";
 
 
@@ -35,18 +35,19 @@ class AdminDashboard extends Component {
           </h2>
           <br></br>
           <br></br>
-          <div class="jumbotron">
-            <div class="flex-container">
+          <div className="jumbotron">
+            <div className="flex-container">
+            <img className="adminImage" src={require('../Images/admin.png')}></img>
               <input
                 type="button"
-                class="button"
+                className="button"
                 name="addProducts"
-                value="Add Product"
+                value="Add Products"
                 onClick={this.handleClick}
               ></input>
               <input
                 type="button"
-                class="button"
+                className="button"
                 value="View Products"
                 name="viewProducts"
                 onClick={this.handleClick}

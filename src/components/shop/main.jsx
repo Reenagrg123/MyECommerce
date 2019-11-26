@@ -20,32 +20,49 @@ class Shop extends Component {
   handleSearch=(event)=>{
     const {productName}=this.state.productsData;
     const {searchData,productsData}=this.state;
+    
+    if(searchData!=""){
       var searchedData=productsData.filter(data=>(data.productName)===searchData);
-      this.setState({productsData:searchedData});
+      this.setState({productsData:searchedData},()=>{this.getCategory()});
+    }
+     else{
+        this.getAllProducts();
+        this.getCategory();
+     }
+      
+
+
+  }
+  getAllProducts=()=>{
+    var productsData = JSON.parse(localStorage.getItem("products"));
+    this.setState({productsData:productsData},()=>{this.getCategory();
+    console.log("hello")});
   }
   componentDidMount() {
-    var productsData = JSON.parse(localStorage.getItem("products"));
-    this.setState({productsData:productsData});
-
-    var electronicsData = productsData.filter(
-      data => data.category == "Electronics"
-    );
-    this.setState({ electronicsData: electronicsData });
-
-    var footwearsData = productsData.filter(
-      data => data.category == "Footwear"
-    );
-    this.setState({ footwearsData: footwearsData });
-
-    var mensData = productsData.filter(data => data.category == "Men");
-    this.setState({ mensData: mensData });
-
-    var womensData = productsData.filter(data => data.category == "Women");
-    this.setState({ womensData: womensData });
+   this.getAllProducts();
   }
-  getCategoryData=()=>{
-    
-  }
+
+getCategory=()=>{
+  const {productsData}=this.state;
+  console.log(productsData);
+  var electronicsData = productsData.filter(
+    data => data.category == "Electronics"
+  );
+  // this.setState({ electronicsData: electronicsData });
+
+  var footwearsData = productsData.filter(
+    data => data.category == "Footwear"
+  );
+  // this.setState({ footwearsData: footwearsData });
+
+  var mensData = productsData.filter(data => data.category == "Men");
+  // this.setState({ mensData: mensData });
+
+  var womensData = productsData.filter(data => data.category == "Women");
+  this.setState({ electronicsData: electronicsData,footwearsData: footwearsData,mensData: mensData,womensData: womensData });
+
+}
+
   handleSearch(){
 
   }

@@ -8,10 +8,10 @@ class Navbar extends Component {
                     <li><a href="/home">Home</a></li>
                     <li><a href="shop">Shop</a></li>
                     <li><a href="/login">Login</a></li>
-                    <li><a href="#">Cart</a></li>
+                    <li><a href="#"><i class="fa fa-shopping-cart"></i>  Cart</a></li>
                 </ul>
             );
     }
-}
+} 
  
 export default Navbar;

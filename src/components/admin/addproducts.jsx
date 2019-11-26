@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./addproducts.css";
-import "./inputs.css";
+import "../inputs.css";
 import nextId from "react-id-generator";
 import {withRouter,Redirect} from 'react-router-dom';
 // import ViewProduct from "./viewproducts";
@@ -39,35 +39,39 @@ class AddProducts extends Component {
     this.setState({ productId: productId });
     
     var productsData = JSON.parse(localStorage.getItem("products"));
-    console.log("Storage data: ", productsData);
+    // console.log("Storage data: ", productsData);
 
     var tempData = [];
 
-    if (productsData == null) {
-      console.log("first item");
+    if (productsData === null) {
+      // console.log("first item");
       localStorage.setItem("products", JSON.stringify(this.state));
     } else {
-      console.log("After first item");
+      // console.log("After first item");
 
-      for (let i = 0; i < productsData.length; i++) {
-        tempData.push(productsData[i]);
-      }
+      // for (let i = 0; i < productsData.length; i++) {
+      //   tempData.push(productsData[i]);
+      productsData.map(product=>tempData.push(product));
+      
       tempData.push(this.state);
       localStorage.setItem("products", JSON.stringify(tempData));
     }
 
     alert("Product added successfully");
     // this.props.history.push('/admin');
-    // this.setState({isItemAdded:true});
-
-
-  };
+    this.setState({isItemAdded:true});
+};
 
   render() {
-    if(this.state.isItemAdded==true){
-      return(<Redirect to="/admin"/>)
+    console.log("hdhhd");
+    console.log(this.state.isItemAdded);
+    if(this.state.isItemAdded){
+    
+      window.open('/admin/');
     }
     else{
+      console.log("hdhhd");
+
     return (
       <React.Fragment>
         <br></br>
@@ -83,7 +87,8 @@ class AddProducts extends Component {
             <b>Category</b>
           </label>
           <select class="textbox" name="category" onChange={this.handleChange}>
-            <option value="Men" selected="selected">Men</option>
+          <option>--Select category--</option>
+            <option value="Men" defaultValue="Men">Men</option>
             <option value="Women">Women </option>
             <option value="Footwear">Footwear</option>
             <option value="Electronics">Electronics</option>
@@ -134,9 +139,9 @@ class AddProducts extends Component {
           ></input>
           <br></br>
           <br></br>
-          <button type="Add Item" className="button">
-            Add Item
-          </button>
+          <input type="submit" className="button"
+            value="Add Item"></input>
+         
         </form>
       </React.Fragment>
     );
