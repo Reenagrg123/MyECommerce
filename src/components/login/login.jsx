@@ -1,125 +1,143 @@
-import React, { Component } from 'react';
-import './login.css';
-import { Redirect } from 'react-router-dom';
-import App from '../../App';
-import AdminDashboard from '../admin/admindashboard';
-import '../inputs.css';
-import LoginForm from '../loginform';
-import 'react-router-dom';
+import React, { Component } from "react";
+import "./login.css";
+import { Redirect } from "react-router-dom";
+import App from "../../App";
+import AdminDashboard from "../admin/admindashboard";
+import "../inputs.css";
+import LoginForm from "../loginform";
+import "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.username = '';
-    this.password = '';
+    this.username = "";
+    this.password = "";
+    this.users = null;
 
     this.state = {
-      username: '',
-      password: '',
-      isAuthenticated: false,
-      // isLoggedIn: false,
-      errorMsg: '',
-      userRole: '',
+      username: "",
+      password: "",
+      isLoggedIn: false,
+      errorMsg: "",
+      userRole: "",
       isClickedRegister: false,
       isClickedLogin: false,
+      isAuth: false
     };
   }
-  handleRegister = () => {
-    this.setState({
-      isClickedRegister: true,
-    });
-  };
+
   componentDidMount() {
     this.setState({
-      userRole: this.props.userRole,
+      userRole: this.props.userRole
     });
   }
+  // ..................................
+  handleRegister = () => {
+    this.setState({
+      isClickedRegister: true
+    });
+  };
+  //.............................
+  handleChange = (event) => {
+    let name = event.target.name;
+    let value = event.target.value;
+    this.setState({
+      [name]: value
+    });
+  };
+  //..................................
+  handleLogin = (event) => {
+    const { username, password, isAuthenticated, userRole } = this.state;
+    event.preventDefault();
 
+    if (userRole == "admin") {
+      this.getAdminCredentials();
+      this.isAuthenticated();
+    } else {
+      this.getUserCredentials();
+    }
+    this.setLoginStatus();
+  };
+
+  //..........................................
   getAdminCredentials = () => {
-    var credentials = '';
-    if (this.state.userRole === 'admin') {
-      credentials = JSON.parse(localStorage.getItem('Admin'));
+    var credentials = "";
+    if (this.state.userRole === "admin") {
+      credentials = JSON.parse(localStorage.getItem("Admin"));
     }
     this.username = credentials.username;
     this.password = credentials.password;
   };
 
-  handleChange = event => {
-    let name = event.target.name;
-    let value = event.target.value;
-    this.setState({
-      [name]: value,
-    });
-    console.log(name, value);
+  //.............................................
+  getUserCredentials = () => {
+    this.users = JSON.parse(localStorage.getItem("Users"));
+    //console.log(this.users.find(this.iterateUsers));
+    // var currentUser = this.users.find(this.iterateUsers);
+    if (this.users.find(this.iterateUsers)) {
+      console.log("find");
+      return true;
+    }
   };
 
-  getUserCredentials = () => {
-    var users = JSON.parse(localStorage.getItem('Users'));
-    users.map(user => this.setCredentials(user));
-  };
-  setCredentials = user => {
+  //...........................................
+  iterateUsers = (user) => {
+    console.log("user:", user);
     this.username = user.username;
     this.password = user.password;
-    console.log('username:', this.username);
-    console.log('password:', this.password);
+    console.log("username:", this.username);
+    console.log("password:", this.password);
 
-    this.validate();
-  };
-
-  handleSubmit = event => {
-    const { username, password, isAuthenticated, userRole } = this.state;
-    event.preventDefault();
-
-    if (userRole == 'admin') {
-      this.getAdminCredentials();
-    } else {
-      this.getUserCredentials();
+    if (this.isAuthenticated()) {
+      console.log("isauth");
+      return true;
     }
-    this.validate();
   };
 
-  validate = () => {
-    var error_msg = '';
-    var authFlag = false;
-    const { username, password, isAuthenticated, userRole } = this.state;
+  //............................................
+  isAuthenticated = () => {
+    const { username, password } = this.state;
 
-    console.log('username***:', this.username);
-    console.log('password***:', this.password);
+    // console.log("username***:", this.username);
+    // console.log("password***:", this.password);
+
     if (username == this.username && password == this.password) {
-      authFlag = true;
-      alert('Login successfully');
-      error_msg = '';
-    } else if (username != this.username || password != this.password) {
-      error_msg = 'Your username or password is incorrect';
-    }
-    this.setState({
-      errorMsg: error_msg,
-    });
-    error_msg = 'Your username or password is incorrect';
-    if (authFlag) {
-      this.setState({
-        isAuthenticated: true,
+      this.setState({ isAuth: true }, () => {
+        console.log("jdj", this.state.isAuth);
+        return true;
       });
+      // console.log("equal");
     }
-    console.log('hello');
   };
 
+  setLoginStatus = () => {
+    console.log(this.state.isAuth);
+    if (this.state.isAuth) {
+      console.log("**equal");
+      this.setState({ isLoggedIn: true });
+    } else {
+      // console.log("not found");
+      var errorMsg = "Please enter valid email and password";
+      this.setState({ errorMsg: errorMsg });
+    }
+  };
+  //..............................................
   render() {
     const {
       username,
       password,
       errorMsg,
-      isAuthenticated,
+      isLoggedIn,
       userRole,
-      isClickedRegister,
+      isClickedRegister
     } = this.state;
 
     return (
       <React.Fragment>
         {isClickedRegister && <Redirect to="/register" />}
-        {isAuthenticated ? (
+        {isLoggedIn ? (
           <div>
-            {userRole == 'admin' ? (
+            {userRole == "admin" ? (
               <Redirect to="/admin" />
             ) : (
               <Redirect to="/home" />
@@ -127,77 +145,77 @@ class Login extends Component {
           </div>
         ) : (
           <div>
-            {(userRole == 'admin' || userRole == 'user') && (
-              <form className="form" onSubmit={this.handleSubmit}>
-                <div className="container">
-                  <h5>
-                    <b>
-                      {userRole == 'admin' && <center>Admin Login</center>}
-                      {userRole == 'user' && <center>User Login</center>}
-                    </b>
-                  </h5>
-                  <br></br>
-                  <p class="errorMsg">{errorMsg}</p>
-                  <label>
-                    <b>Username </b>
-                  </label>
-                  <br></br>
+            (
+            <form className="form" onSubmit={this.handleLogin}>
+              <div className="container">
+                <h5>
+                  <b>
+                    {userRole == "admin" && <center>Admin Login</center>}
+                    {userRole == "user" && <center>User Login</center>}
+                  </b>
+                </h5>
+                <br></br>
+                <p class="errorMsg">{errorMsg}</p>
+                <label>
+                  <b>Username </b>
+                </label>
+                <br></br>
 
-                  <input
-                    type="text"
-                    className="textbox"
-                    placeholder="Enter username"
-                    name="username"
-                    value={username}
-                    onChange={this.handleChange}
-                    required
-                  ></input>
-                  <br></br>
-                  <br></br>
-                  <label>
-                    <b>Password</b>
-                  </label>
-                  <br></br>
-                  <input
-                    type="password"
-                    className="textbox"
-                    placeholder="Enter password"
-                    name="password"
-                    value={password}
-                    onChange={this.handleChange}
-                    required
-                  ></input>
-                  <br></br>
-                  <br></br>
-                  {userRole == 'user' && (
-                    <center>
-                      <p>Already registered?</p>
-                    </center>
-                  )}
+                <input
+                  type="text"
+                  className="textbox"
+                  placeholder="Enter username"
+                  name="username"
+                  value={username}
+                  onChange={this.handleChange}
+                  required
+                ></input>
+                <br></br>
+                <br></br>
+                <label>
+                  <b>Password</b>
+                </label>
+                <br></br>
+                <input
+                  type="password"
+                  className="textbox"
+                  placeholder="Enter password"
+                  name="password"
+                  value={password}
+                  onChange={this.handleChange}
+                  required
+                ></input>
+                <br></br>
+                <br></br>
+                {userRole == "user" && (
+                  <center>
+                    <p>Already registered?</p>
+                  </center>
+                )}
+                <button
+                  type="submit"
+                  id="loginBtn"
+                  className="button"
+                  onClick={this.handleLogin}
+                >
+                  Login
+                </button>
+              </div>
+              {userRole == "user" && (
+                <div>
+                  <center>
+                    <p>Don't have an account?</p>
+                  </center>
                   <button
-                    type="submit"
-                    id="loginBtn"
-                    className="button"
-                    onClick={this.handleLogin}
+                    id="registerBtn"
+                    class="button"
+                    onClick={this.handleRegister}
                   >
-                    Login
+                    Register
                   </button>
                 </div>
-                {userRole == 'user' && (
-                  <div>
-                    <center>
-                      <p>Don't have an account?</p>
-                    </center>
-                    <button
-                      id="registerBtn"
-                      class="button"
-                      onClick={this.handleRegister}
-                    >
-                      Register
-                    </button>
-                  </div>
-                )}
-              </form>
+              )}
+            </form>
             )}
           </div>
         )}

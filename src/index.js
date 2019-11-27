@@ -14,6 +14,7 @@ import EachProduct from './components/admin/eachproduct';
 import Shop from './components/shop/main';
 import SelectUser from './components/login/selectuser';
 import Register from './components/login/register';
+import Cart from './components/cart/index';
 
 // ReactDOM.render(<NavBar/>, document.getElementById('nav-bar'));
 
@@ -34,6 +35,7 @@ const routing=(
             <Route path="/shop" component={Shop}/>
             <Route path="/login" component={SelectUser}/>
             <Route path="/register" component={Register}/>
+            <Route path="/cart" component={Cart}/>
 
         </div>
     </Router>

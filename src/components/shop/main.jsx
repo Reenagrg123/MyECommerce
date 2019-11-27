@@ -30,8 +30,6 @@ class Shop extends Component {
         this.getCategory();
      }
       
-
-
   }
   getAllProducts=()=>{
     var productsData = JSON.parse(localStorage.getItem("products"));
