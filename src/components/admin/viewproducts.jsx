@@ -1,33 +1,43 @@
 import React, { Component } from "react";
 import EachProduct from "./eachproduct";
 import ProductDetail from "./productdetail";
+import Pagination from "../reusable/pagination";
 
 class ViewProducts extends Component {
+  productsPerPage = 5;
+
+  
+
   constructor(props) {
     super(props);
     this.state = {
       productsData: null,
+
       isClickedView: false,
       product: null,
-      path: ""
+      currentPage:1,
+      currentProducts: null
     };
   }
+
+  componentDidMount() {
+    var productsData = this.getProductsData();
+    console.log("Data:", this.state.productsData);
+    this.setState({ productsData: productsData });
+  }
+
   getProductsData = () => {
     var productsData = JSON.parse(localStorage.getItem("products"));
     return productsData;
   };
+
+  getCurrentProducts = () => {};
+
   handleView = (product) => {
     console.log("hgfhfd");
     this.setState({ isClickedView: true });
     this.setState({ product: product });
   };
-
-  componentDidMount() {
-    // console.log("Data:", productsData);
-
-    var productsData = this.getProductsData();
-    this.setState({ productsData: productsData });
-  }
 
   handleDelete = (id) => {
     var newData = null;
@@ -45,9 +55,22 @@ class ViewProducts extends Component {
     this.setState({ isClickedView: false });
   };
 
+  getCurrentPage=(pageNumber)=>{
+    this.setState({currentPage:pageNumber});
+  }
+
   render() {
-    if (this.state.productsData != null && this.state.isClickedView != true) {
-      console.log(this.state.productsData);
+    const {productsData,isClickedView,currentPage,product}=this.state;
+    console.log("current page:",currentPage);
+    if (productsData != null && isClickedView != true) {
+
+      const indexOfLastProduct = currentPage * this.productsPerPage;
+      const indexOfFirstProduct = indexOfLastProduct - this.productsPerPage;
+      var currentProducts = productsData.slice(
+        indexOfFirstProduct,
+        indexOfLastProduct
+      );
+      console.log("currentProducts:", currentProducts);
 
       return (
         <div>
@@ -61,7 +84,7 @@ class ViewProducts extends Component {
             </center>
           </h1>
 
-          <table class="viewProducts">
+          <table className="viewProducts">
             <tbody>
               <tr>
                 <th>Product ID</th>
@@ -72,7 +95,7 @@ class ViewProducts extends Component {
                 <th></th>
                 <th></th>
               </tr>
-              {this.state.productsData.map((product) => (
+              {currentProducts.map((product) => (
                 <EachProduct
                   key={product.productId}
                   product={product}
@@ -84,11 +107,17 @@ class ViewProducts extends Component {
               ))}
             </tbody>
           </table>
+          <Pagination
+            productsPerPage={this.productsPerPage}
+            totalProducts={productsData.length}
+            getCurrentPage={this.getCurrentPage}
+
+          ></Pagination>
         </div>
       );
-    } else if (this.state.isClickedView) {
+    } else if (isClickedView) {
       return (
-        <ProductDetail product={this.state.product} onBack={this.handleBack} />
+        <ProductDetail product={product} onBack={this.handleBack} />
       );
     } else {
       return null;
