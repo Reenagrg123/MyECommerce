@@ -30,3 +30,31 @@
   padding:40px;
   align-items: center;
 }
+
+.navigation {
+  list-style: none;
+  background:#008cba;
+  display: flex;
+  justify-content:flex-end;
+  padding-right:250px;
+}
+
+.navigation a {
+  text-decoration: none;
+  display: block;
+  color: white;
+  text-align: center; 
+  padding: 20px;
+  padding-right:50px;
+  font-size: 20px;
+}
+
+.navigation a:hover {
+  color:black;
+}
+.navigation a:active{
+  color:black;
+}
+.navigation .activeClass{
+  color:black;
+}

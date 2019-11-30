@@ -1,3 +1,9 @@
+.adminImage{
+    margin-left:40px;
+    margin-right:100px;
+    width:250px;
+
+}
 .viewProducts{
     font-family:"Trebuchet MS, Arial, Helvetica, sans-serif";
     width:90%;
@@ -31,4 +37,13 @@
 }
 .jumbotron{
     height:450px;
+}
+
+.greybtn,.redbtn{
+    padding:0px 10px;
+    border:1px solid black;
+    width:60%;
+}
+.redbtn{
+    background-color: rgba(255, 0, 0, 0.700);
 }

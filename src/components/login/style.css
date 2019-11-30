@@ -1,0 +1,12 @@
+.errorMsg {
+  color: red;
+  font-size: 15px;
+}
+
+#loginBtn {
+  width: 100%;
+}
+
+#registerBtn {
+  width: 100%;
+}

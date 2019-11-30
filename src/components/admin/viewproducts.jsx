@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./viewproducts.css";
 import EachProduct from "./eachproduct";
 import ProductDetail from "./productdetail";
 
@@ -17,7 +16,7 @@ class ViewProducts extends Component {
     var productsData = JSON.parse(localStorage.getItem("products"));
     return productsData;
   };
-  handleView = product => {
+  handleView = (product) => {
     console.log("hgfhfd");
     this.setState({ isClickedView: true });
     this.setState({ product: product });
@@ -30,11 +29,11 @@ class ViewProducts extends Component {
     this.setState({ productsData: productsData });
   }
 
-  handleDelete = id => {
+  handleDelete = (id) => {
     var newData = null;
     var productsData = this.getProductsData();
     console.log(id);
-    newData = productsData.filter(product => id != product.productId);
+    newData = productsData.filter((product) => id != product.productId);
     console.log(newData);
     // this.setState(productsData:newData);
     localStorage.setItem("products", JSON.stringify(newData));
@@ -63,32 +62,34 @@ class ViewProducts extends Component {
           </h1>
 
           <table class="viewProducts">
-            <tr>
-              <th>Product ID</th>
-              <th>Category</th>
-              <th>Product Name</th>
-              <th>Quantity</th>
-              <th>Price(Rs).</th>
-              <th></th>
-              <th></th>
-            </tr>
-            {this.state.productsData.map(product => (
-              <EachProduct
-                key={product.productId}
-                product={product}
-                onDelete={this.handleDelete}
-                onView={this.handleView}
-              >
-                <td>P{product.productId}</td>
-              </EachProduct>
-            ))}
+            <tbody>
+              <tr>
+                <th>Product ID</th>
+                <th>Category</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price(Rs).</th>
+                <th></th>
+                <th></th>
+              </tr>
+              {this.state.productsData.map((product) => (
+                <EachProduct
+                  key={product.productId}
+                  product={product}
+                  onDelete={this.handleDelete}
+                  onView={this.handleView}
+                >
+                  <td>P{product.productId}</td>
+                </EachProduct>
+              ))}
+            </tbody>
           </table>
         </div>
       );
     } else if (this.state.isClickedView) {
-    return(
-        <ProductDetail product={this.state.product} onBack={this.handleBack}/>
-    );
+      return (
+        <ProductDetail product={this.state.product} onBack={this.handleBack} />
+      );
     } else {
       return null;
     }

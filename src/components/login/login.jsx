@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import "./login.css";
 import { Redirect } from "react-router-dom";
 import App from "../../App";
-import AdminDashboard from "../admin/admindashboard";
+import AdminDashboard from "../admin";
 import "../inputs.css";
-import LoginForm from "../loginform";
 import "react-router-dom";
 
 class Login extends Component {
@@ -13,16 +11,15 @@ class Login extends Component {
     this.username = "";
     this.password = "";
     this.users = null;
+    this.isAuth = false;
 
     this.state = {
       username: "",
       password: "",
-      isLoggedIn: false,
       errorMsg: "",
       userRole: "",
       isClickedRegister: false,
-      isClickedLogin: false,
-      isAuth: false
+      isClickedLogin: false
     };
   }
 
@@ -52,11 +49,13 @@ class Login extends Component {
 
     if (userRole == "admin") {
       this.getAdminCredentials();
-      this.isAuthenticated();
+      this.isAuth = this.isAuthenticated();
+      //console.log("gdhgdhg", this.isAuth);
     } else {
-      this.getUserCredentials();
+      this.isAuth = this.getUserCredentials();
     }
-    this.setLoginStatus();
+    //console.log("ghgdgh", this.isAuth);
+    this.setLoginStatus(this.isAuth);
   };
 
   //..........................................
@@ -64,7 +63,7 @@ class Login extends Component {
     var credentials = "";
     if (this.state.userRole === "admin") {
       credentials = JSON.parse(localStorage.getItem("Admin"));
-    }
+    }console.log(credentials);
     this.username = credentials.username;
     this.password = credentials.password;
   };
@@ -74,22 +73,22 @@ class Login extends Component {
     this.users = JSON.parse(localStorage.getItem("Users"));
     //console.log(this.users.find(this.iterateUsers));
     // var currentUser = this.users.find(this.iterateUsers);
+    if(this.users){
     if (this.users.find(this.iterateUsers)) {
-      console.log("find");
       return true;
     }
+  }
   };
 
   //...........................................
   iterateUsers = (user) => {
-    console.log("user:", user);
+    //console.log("user:", user);
     this.username = user.username;
     this.password = user.password;
-    console.log("username:", this.username);
-    console.log("password:", this.password);
+    //console.log("username:", this.username);
+    //console.log("password:", this.password);
 
     if (this.isAuthenticated()) {
-      console.log("isauth");
       return true;
     }
   };
@@ -97,28 +96,37 @@ class Login extends Component {
   //............................................
   isAuthenticated = () => {
     const { username, password } = this.state;
-
-    // console.log("username***:", this.username);
-    // console.log("password***:", this.password);
-
     if (username == this.username && password == this.password) {
-      this.setState({ isAuth: true }, () => {
-        console.log("jdj", this.state.isAuth);
-        return true;
-      });
-      // console.log("equal");
+     // console.log("equal");
+      return true;
     }
   };
 
-  setLoginStatus = () => {
-    console.log(this.state.isAuth);
-    if (this.state.isAuth) {
-      console.log("**equal");
-      this.setState({ isLoggedIn: true });
+  setLoginStatus = (isAuth) => {
+    //console.log("IsAuth: ", this.isAuth);
+    if (this.isAuth) {
+      this.setSession();
+      this.props.loginStatus();
+      alert("Logged in successfully");
     } else {
-      // console.log("not found");
       var errorMsg = "Please enter valid email and password";
       this.setState({ errorMsg: errorMsg });
+    }
+  };
+
+  
+
+  setSession = () => {
+    const currentUser = {};
+
+    currentUser.username = this.state.username;
+    currentUser.password = this.state.password;
+    console.log("currentUser: ", currentUser);
+
+    if (this.state.userRole === "admin")
+      localStorage.setItem("adminSession", JSON.stringify(currentUser));
+    else {
+      localStorage.setItem("userSession", JSON.stringify(currentUser));
     }
   };
   //..............................................
@@ -131,16 +139,17 @@ class Login extends Component {
       userRole,
       isClickedRegister
     } = this.state;
-
+    console.log("In login",this.props.isLoggedIn);
+    
     return (
       <React.Fragment>
         {isClickedRegister && <Redirect to="/register" />}
-        {isLoggedIn ? (
+        {this.props.isLoggedIn ? (
           <div>
             {userRole == "admin" ? (
               <Redirect to="/admin" />
             ) : (
-              <Redirect to="/home" />
+              <Redirect to="/"/>
             )}
           </div>
         ) : (
@@ -155,7 +164,7 @@ class Login extends Component {
                   </b>
                 </h5>
                 <br></br>
-                <p class="errorMsg">{errorMsg}</p>
+                <p className="errorMsg">{errorMsg}</p>
                 <label>
                   <b>Username </b>
                 </label>
@@ -208,7 +217,7 @@ class Login extends Component {
                   </center>
                   <button
                     id="registerBtn"
-                    class="button"
+                    className="button"
                     onClick={this.handleRegister}
                   >
                     Register

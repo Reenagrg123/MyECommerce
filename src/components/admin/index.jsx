@@ -1,32 +1,37 @@
 import React, { Component, Fragment } from "react";
-import "./admindashboard.css";
+import "./style.css";
 import AddProducts from "./addproducts";
 import "../inputs.css";
 import ViewProducts from "./viewproducts";
+import {Redirect} from 'react-router-dom';
 
 
 class AdminDashboard extends Component {
-  state = {
-    isClickedAddItems: false,
-    isClickedViewItems: false
-  };
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      isClickedAddProducts: false,
+      isClickedViewProducts: false
+    };
+  }
+  
 
-  handleClick = event => {
-    console.log(event.target.name);
+  handleClick = (event) => {
+    // console.log(event.target.name);
     if (event.target.name == "addProducts") {
-      this.setState({ isClickedAddItems: true });
+      this.setState({ isClickedAddProducts: true });
     } else if (event.target.name == "viewProducts") {
-      this.setState({ isClickedViewItems: true });
+      this.setState({ isClickedViewProducts: true });
     }
   };
 
   render() {
-    if (this.state.isClickedAddItems) {
-      return <AddProducts />;
-    } else if (this.state.isClickedViewItems) {
-      return <ViewProducts />;
-    } else {
-      return (
+    return (
+      <div>
+        {this.state.isClickedAddProducts && this.props.history.push("/addProducts")}
+        {this.state.isClickedViewProducts && this.props.history.push("/viewProducts")}
+
         <Fragment>
           <h2>
             <u>
@@ -37,7 +42,10 @@ class AdminDashboard extends Component {
           <br></br>
           <div className="jumbotron">
             <div className="flex-container">
-            <img className="adminImage" src={require('../Images/admin.png')}></img>
+              <img
+                className="adminImage"
+                src={require("../Images/admin.png")}
+              ></img>
               <input
                 type="button"
                 className="button"
@@ -55,8 +63,8 @@ class AdminDashboard extends Component {
             </div>
           </div>
         </Fragment>
-      );
-    }
+      </div>
+    );
   }
 }
 export default AdminDashboard;
