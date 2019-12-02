@@ -24,24 +24,24 @@ class EachProduct extends Component {
           <button
             type="button"
             name="view"
-            class="greybtn"
+            className="greybtn"
             onClick={() => {
               onView(product);
             }}
           >
-            <i class="fa fa-eye"></i>
+            <i className="fa fa-eye"></i>
           </button>
         </td>
         <td>
           <button
             type="button"
             name="delete"
-            class="redbtn"
+            className="redbtn"
             onClick={() => {
               onDelete(product.productId);
             }}
           >
-            <i class="fa fa-remove"></i>
+            <i className="fa fa-remove"></i>
           </button>
         </td>
       </tr>

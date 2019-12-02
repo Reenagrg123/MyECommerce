@@ -1,0 +1,35 @@
+.home {
+  background-image: url("./Images/banner_image.jpg");
+  height: 50vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-color: darkgrey;
+  margin-bottom: 40px;
+}
+@media (min-width: 650px) {
+  .home {
+    background-position: center;
+  }
+}
+.row {
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  margin-bottom: 30px;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 25%;
+  
+}
+
+.column img {
+  margin-top: 40px;
+  vertical-align: middle;
+  border-block-color: black;
+  width:60%;
+  height:70%;
+}

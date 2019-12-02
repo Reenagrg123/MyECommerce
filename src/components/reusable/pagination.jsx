@@ -9,12 +9,14 @@ const Pagination=(props)=>{
         pageNumbers.push(i);
     }
     return(
-        <ul className="pagination">
+        <div className="pagination">
           {pageNumbers.map(number=>(
-              <li key={number} onClick={()=>getCurrentPage(number)}>{number}</li>
+              <button key={number} onClick={()=>getCurrentPage(number)}>{number}</button>
           ))}
-        </ul>
 
+        </div>
+
+        
     );
 }
 

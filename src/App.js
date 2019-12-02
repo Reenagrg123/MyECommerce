@@ -7,7 +7,6 @@ import AdminDashboard from "./components/admin";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import AddProducts from "./components/admin/addproducts";
 import ViewProducts from "./components/admin/viewproducts";
-// import Test from "./components/test";
 import EachProduct from "./components/admin/eachproduct";
 import Shop from "./components/shop";
 import SelectUser from "./components/login";
@@ -16,6 +15,7 @@ import Cart from "./components/cart";
 import Home from "./components/home";
 import NotFound from "./components/notfound";
 import LogOut from "./components/login/logout";
+import ProductDetail from "./components/admin/productdetail";
 
 import {
   AdminPrivateRoute,
@@ -27,39 +27,50 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      userRole:""
-      };
+      userRole: "",
+      cartCount:0
+    };
   }
 
   updateLoginStatus = () => {
-    console.log("Togglong login status");
-    if(this.state.userRole==="user"){
-    if (localStorage.getItem("userSession")) {
-      this.setState((prevState, props) => {
-        return { isLoggedIn: !prevState.isLoggedIn };
-      });
+    // console.log("Togglong login status");
+    if (this.state.userRole === "user") {
+      if (localStorage.getItem("userSession")) {
+        this.setState((prevState, props) => {
+          return { isLoggedIn: !prevState.isLoggedIn };
+        });
+      }
+    } else {
+      if (localStorage.getItem("adminSession")) {
+        this.setState((prevState, props) => {
+          return { isLoggedIn: !prevState.isLoggedIn };
+        });
+      }
     }
-  }
-  else{
-    if (localStorage.getItem("adminSession")) {
-      this.setState((prevState, props) => {
-        return { isLoggedIn: !prevState.isLoggedIn };
-      });
-    }
-  }
   };
 
-  getUserRole=(userRole)=>{
-    console.log("userRole:",userRole);
-    this.setState({userRole:userRole});
+  getUserRole = (userRole) => {
+    // console.log("userRole:", userRole);
+    this.setState({ userRole: userRole });
+  };
+
+
+  handleCartCount=(count)=>{
+    console.log("cartCount:",count);
+    this.setState({cartCount:count});
+    console.log("cartCount:",count);
 
   }
 
+  
+
+  //................................................................................
   render() {
-    console.log("In App:", this.state.isLoggedIn);
+    // console.log("In App:", this.state.isLoggedIn);
+    const { isLoggedIn, userRole,cartCount } = this.state;
     return (
       <Router>
-        <NavBar isLoggedIn={this.state.isLoggedIn}></NavBar>
+        <NavBar isLoggedIn={isLoggedIn} cartCount={cartCount}></NavBar>
         <Switch>
           <Route path="/" exact component={Home} />
 
@@ -67,25 +78,32 @@ class App extends Component {
             path="/admin"
             component={AdminDashboard}
           ></AdminPrivateRoute>
-          <Route path="/addProducts" component={AddProducts} />
-          <Route path="/viewProducts" component={ViewProducts} />
-          <Route path="/eachproduct" component={EachProduct} />
+          <AdminPrivateRoute path="/addProducts" component={AddProducts} />
+          <AdminPrivateRoute path="/viewProducts" component={ViewProducts} />
 
-          <Route path="/shop" component={Shop} />
+          <AdminPrivateRoute
+            path="/product/:id"
+            component={ProductDetail}
+          ></AdminPrivateRoute>
+
+          <Route path="/shop"><Shop calculateCartCount={this.handleCartCount}></Shop></Route>
 
           <Route path="/login">
             <SelectUser
               getUserRole={this.getUserRole}
               loginStatus={this.updateLoginStatus}
-              isLoggedIn={this.state.isLoggedIn}
+              isLoggedIn={isLoggedIn}
             />
           </Route>
 
-          {this.state.isLoggedIn &&
-          <Route path="/logout">
-            <LogOut loginStatus={this.updateLoginStatus} />
-          </Route>
-          }
+          {this.state.isLoggedIn && (
+            <Route path="/logout">
+              <LogOut
+                loginStatus={this.updateLoginStatus}
+                userRole={userRole}
+              />
+            </Route>
+          )}
 
           <Route path="/register" component={Register} />
           <UserPrivateRoute path="/cart" component={Cart} />

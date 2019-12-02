@@ -19,7 +19,9 @@
     padding:10px;
     font-size: x-large;
 }
-
+.viewProducts tr{
+    border-bottom: 1px solid #000;
+}
 .viewProducts td{
     text-align:center;
     padding:10px;
@@ -46,4 +48,10 @@
 }
 .redbtn{
     background-color: rgba(255, 0, 0, 0.700);
+}
+
+.productCount{
+    float:right;
+    margin-right:30px;
+    background-color: cornsilk;
 }

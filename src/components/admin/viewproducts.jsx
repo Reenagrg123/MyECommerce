@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import EachProduct from "./eachproduct";
 import ProductDetail from "./productdetail";
 import Pagination from "../reusable/pagination";
+import { Redirect } from "react-router-dom";
 
 class ViewProducts extends Component {
   productsPerPage = 5;
-
-  
 
   constructor(props) {
     super(props);
@@ -15,7 +14,7 @@ class ViewProducts extends Component {
 
       isClickedView: false,
       product: null,
-      currentPage:1,
+      currentPage: 1,
       currentProducts: null
     };
   }
@@ -55,15 +54,14 @@ class ViewProducts extends Component {
     this.setState({ isClickedView: false });
   };
 
-  getCurrentPage=(pageNumber)=>{
-    this.setState({currentPage:pageNumber});
-  }
+  getCurrentPage = (pageNumber) => {
+    this.setState({ currentPage: pageNumber });
+  };
 
   render() {
-    const {productsData,isClickedView,currentPage,product}=this.state;
-    console.log("current page:",currentPage);
+    const { productsData, isClickedView, currentPage, product } = this.state;
+    console.log("current page:", currentPage);
     if (productsData != null && isClickedView != true) {
-
       const indexOfLastProduct = currentPage * this.productsPerPage;
       const indexOfFirstProduct = indexOfLastProduct - this.productsPerPage;
       var currentProducts = productsData.slice(
@@ -74,6 +72,7 @@ class ViewProducts extends Component {
 
       return (
         <div>
+          <h3 className="productCount">Total {productsData.length} products</h3>
           <h1>
             <center>
               <b>
@@ -111,14 +110,13 @@ class ViewProducts extends Component {
             productsPerPage={this.productsPerPage}
             totalProducts={productsData.length}
             getCurrentPage={this.getCurrentPage}
-
           ></Pagination>
         </div>
       );
     } else if (isClickedView) {
-      return (
-        <ProductDetail product={product} onBack={this.handleBack} />
-      );
+      console.log("hgdgh");
+      return <Redirect to={{ path: "/product" }} />;
+     
     } else {
       return null;
     }

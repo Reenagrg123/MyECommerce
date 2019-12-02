@@ -13,7 +13,8 @@ class AddProducts extends Component {
       quantity: "",
       price: "",
       selectedFile: "",
-      isItemAdded: false
+      isItemAdded: false,
+      isClickedBack:false
     };
   }
 
@@ -67,11 +68,17 @@ class AddProducts extends Component {
     this.setState({ isItemAdded: true });
   };
 
+  handleBack=(event)=>{
+    this.setState({isClickedBack:true});
+  }
+
   render() {
     // console.log(this.state.isItemAdded);
+    const {isItemAdded,isClickedBack}=this.state;
     return (
       <React.Fragment>
-        {this.state.isItemAdded ? (
+      {isClickedBack && this.props.history.push('/admin')}
+        {isItemAdded ? (
           // window.open('/admin/');
           <Redirect to="/admin"></Redirect>
         ) : (
@@ -83,6 +90,8 @@ class AddProducts extends Component {
                   <u>Add Product</u>
                 </b>
               </center>
+              
+             <input type="button" className="button" value="<--Back to DashBoard" onClick={this.handleBack}></input>
             </h2>
             <form className="form" onSubmit={this.handleSubmit}>
               <label>

@@ -8,15 +8,60 @@ class Shop extends Component {
       productsData: null,
       electronicsData: null,
       footwearsData: null,
-      mensData: null,
-      womensData: null,
+      menData: null,
+      womenData: null,
       searchData: ""
     };
   }
 
+  //loading the data initially
+  componentDidMount() {
+    this.getAllProducts();
+  }
+
+  //get All products from localstorage
+  getAllProducts = () => {
+    var productsData = JSON.parse(localStorage.getItem("products"));
+    //  productsData.map(product=>delete product.quantity);
+    
+
+    console.log("cbbd",productsData);
+    this.setState({ productsData: productsData }, () => {
+      this.getCategory();
+      console.log("hello");
+    });
+  };
+
+  //Filtering the data based on Category
+  getCategory = () => {
+    const { productsData } = this.state;
+    // console.log(productsData);
+    var electronicsData = productsData.filter(
+      (data) => data.category === "Electronics"
+    );
+
+    var footwearsData = productsData.filter(
+      (data) => data.category === "Footwear"
+    );
+
+    var menData = productsData.filter((data) => data.category === "Men");
+
+    var womenData = productsData.filter((data) => data.category === "Women");
+    this.setState({
+      electronicsData: electronicsData,
+      footwearsData: footwearsData,
+      menData: menData,
+      womenData: womenData
+    });
+  };
+
+  // ...................................................................................
+  //getting the searching value
   handleChange = (event) => {
     this.setState({ searchData: event.target.value });
   };
+
+  //getting the searhing data
   handleSearch = (event) => {
     const { productName } = this.state.productsData;
     const { searchData, productsData } = this.state;
@@ -33,50 +78,65 @@ class Shop extends Component {
       this.getCategory();
     }
   };
-  componentDidMount() {
-    this.getAllProducts();
-  }
-  getAllProducts = () => {
-    var productsData = JSON.parse(localStorage.getItem("products"));
-    this.setState({ productsData: productsData }, () => {
-      this.getCategory();
-      console.log("hello");
-    });
-  };
- 
 
-  getCategory = () => {
-    const { productsData } = this.state;
-    console.log(productsData);
-    var electronicsData = productsData.filter(
-      (data) => data.category == "Electronics"
+  handleCartClick = (product) => {
+    //getting the adding to cart product
+    console.log(product);
+    // product.quantity=1;
+
+    //setting orderId
+    var orderId = JSON.parse(localStorage.getItem("orderId"));
+    product["orderId"] = ++orderId;
+    localStorage.setItem("orderId", JSON.stringify(orderId));
+
+    //finding userId of loggedIn user
+    var userSession = JSON.parse(localStorage.getItem("userSession"));
+    const username = userSession.username;
+    const password = userSession.password;
+    var users = JSON.parse(localStorage.getItem("Users"));
+    var currentUser = users.find(
+      (user) =>
+        user.username == userSession.username &&
+        user.password == userSession.password
     );
-    // this.setState({ electronicsData: electronicsData });
+    const currentUserId = currentUser.userId;
 
-    var footwearsData = productsData.filter(
-      (data) => data.category == "Footwear"
-    );
-    // this.setState({ footwearsData: footwearsData });
+    var orders = JSON.parse(localStorage.getItem("orders"));
+    console.log("orders:",orders);
 
-    var mensData = productsData.filter((data) => data.category == "Men");
-    // this.setState({ mensData: mensData });
-
-    var womensData = productsData.filter((data) => data.category == "Women");
-    this.setState({
-      electronicsData: electronicsData,
-      footwearsData: footwearsData,
-      mensData: mensData,
-      womensData: womensData
-    });
+    var temp = [];
+    if (orders === null) {
+      var order = { userId: null, products: [] };
+      order.userId = currentUserId;
+      order.products.push(product);
+      temp.push(order);
+      console.log("hdh", temp);
+      localStorage.setItem("orders", JSON.stringify(temp));
+    } 
+    else {
+      
+      orders[0].products.push(product); 
+      console.log(orders[0]);
+      temp.push(orders[0]);
+      console.log("hdh", temp);
+      localStorage.setItem("orders", JSON.stringify(temp));
+    }
+    console.log("products:",orders[0].products);
+    var totalProducts=orders[0].products.length;
+    
+    this.props.calculateCartCount(totalProducts);
+    console.log(totalProducts);
+    alert("Added to cart");
   };
 
-  handleSearch() {}
+  //................................................................................................
   render() {
+    const { electronicsData, footwearsData, menData, womenData } = this.state;
     if (
-      this.state.electronicsData != null &&
-      this.state.footwearsData != null &&
-      this.state.mensData != null &&
-      this.state.womensData != null
+      electronicsData != null &&
+      footwearsData != null &&
+      menData != null &&
+      womenData != null
     ) {
       return (
         <React.Fragment>
@@ -104,9 +164,12 @@ class Shop extends Component {
           <br></br>
           <br></br>
           <div className="row">
-            {this.state.electronicsData.map((product) => (
-              <Card product={product} 
-              key={product.productId}/>
+            {electronicsData.map((product) => (
+              <Card
+                product={product}
+                key={product.productId}
+                onCartClick={this.handleCartClick}
+              />
             ))}
           </div>
           <hr></hr>
@@ -116,9 +179,12 @@ class Shop extends Component {
           <br></br>
           <br></br>
           <div className="row">
-            {this.state.footwearsData.map((product) => (
-              <Card product={product}
-              key={product.productId} />
+            {footwearsData.map((product) => (
+              <Card
+                product={product}
+                key={product.productId}
+                onCartClick={this.handleCartClick}
+              />
             ))}
           </div>
           <hr></hr>
@@ -128,9 +194,12 @@ class Shop extends Component {
           <br></br>
           <br></br>
           <div className="row">
-            {this.state.mensData.map((product) => (
-              <Card product={product}
-              key={product.productId} />
+            {menData.map((product) => (
+              <Card
+                product={product}
+                key={product.productId}
+                onCartClick={this.handleCartClick}
+              />
             ))}
           </div>
           <hr></hr>
@@ -140,9 +209,12 @@ class Shop extends Component {
           <br></br>
           <br></br>
           <div className="row">
-            {this.state.womensData.map((product) => (
-              <Card product={product} 
-              key={product.productId}/>
+            {womenData.map((product) => (
+              <Card
+                product={product}
+                key={product.productId}
+                onCartClick={this.handleCartClick}
+              />
             ))}
           </div>
         </React.Fragment>
