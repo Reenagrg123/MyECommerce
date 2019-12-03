@@ -8,15 +8,28 @@ class Product extends Component {
       total: this.props.product.price
     };
   }
+  
+  componentDidMount(){
+    const {total}=this.state;
+    this.props.calculateTotalPayable(total);
+
+  }
+  componentDidUpdate(prevProps,prevState){
+    const {total}=this.state;
+    if(total!=prevState.total){
+      this.props.calculateTotalPayable(total);
+    }
+  }
 
   handleTotal = (quantity) => {
     // console.log(quantity);
-    const price = parseInt(this.props.product.price);
-    console.log(typeof price);
-    const total = quantity * price;
+    const {price}=this.props.product;
+    const priceInt = parseInt(price);
+    // console.log(typeof price);
+    const total = quantity * priceInt;
     console.log("Total:", total);
     this.setState({ total: total });
-    this.props.calculateTotalPayable(total);
+    this.props.calculateTotalPayable(quantity,priceInt);
   };
 
   render() {

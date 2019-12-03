@@ -16,6 +16,7 @@ import Home from "./components/home";
 import NotFound from "./components/notfound";
 import LogOut from "./components/login/logout";
 import ProductDetail from "./components/admin/productdetail";
+import ThanksShopping from './components/cart/thanksForShopping';
 
 import {
   AdminPrivateRoute,
@@ -30,6 +31,11 @@ class App extends Component {
       userRole: "",
       cartCount:0
     };
+  }
+  componentDidMount(){
+    var orders=JSON.parse(localStorage.getItem("orders"));
+    var totalProducts = orders[0].products.length;
+    this.setState({cartCount:totalProducts});
   }
 
   updateLoginStatus = () => {
@@ -106,7 +112,9 @@ class App extends Component {
           )}
 
           <Route path="/register" component={Register} />
-          <UserPrivateRoute path="/cart" component={Cart} />
+          <UserPrivateRoute path="/cart" component={() => <Cart calculateCartCount={this.handleCartCount} />} />
+          <Route path="/thanks" component={ThanksShopping}></Route>
+          
           <Route component={NotFound}></Route>
         </Switch>
       </Router>

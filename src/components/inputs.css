@@ -61,3 +61,19 @@
 .navigation .activeClass{
   color:black;
 }
+
+.fa{
+  font-size:24px;
+}
+
+.badge:after{
+  content:attr(value);
+  font-size:14px;
+  background: red;
+  border-radius:5px;
+  padding:3px;
+  position:relative;
+  left:-5px;
+  top:-10px;
+  opacity:0.9;
+  }

@@ -23,9 +23,8 @@ class Shop extends Component {
   getAllProducts = () => {
     var productsData = JSON.parse(localStorage.getItem("products"));
     //  productsData.map(product=>delete product.quantity);
-    
 
-    console.log("cbbd",productsData);
+    console.log("cbbd", productsData);
     this.setState({ productsData: productsData }, () => {
       this.getCategory();
       console.log("hello");
@@ -102,7 +101,7 @@ class Shop extends Component {
     const currentUserId = currentUser.userId;
 
     var orders = JSON.parse(localStorage.getItem("orders"));
-    console.log("orders:",orders);
+    console.log("orders:", orders);
 
     var temp = [];
     if (orders === null) {
@@ -112,18 +111,16 @@ class Shop extends Component {
       temp.push(order);
       console.log("hdh", temp);
       localStorage.setItem("orders", JSON.stringify(temp));
-    } 
-    else {
-      
-      orders[0].products.push(product); 
+    } else {
+      orders[0].products.push(product);
       console.log(orders[0]);
       temp.push(orders[0]);
       console.log("hdh", temp);
       localStorage.setItem("orders", JSON.stringify(temp));
     }
-    console.log("products:",orders[0].products);
-    var totalProducts=orders[0].products.length;
-    
+    console.log("products:", orders[0].products);
+    var totalProducts = orders[0].products.length;
+
     this.props.calculateCartCount(totalProducts);
     console.log(totalProducts);
     alert("Added to cart");

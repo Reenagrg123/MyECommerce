@@ -32,7 +32,7 @@ class NavBar extends Component {
         </li>
         <li>
           <NavLink to="/cart" activeClassName=" activeClass">
-            <i className="fa fa-shopping-cart"></i>  Cart <span className="badge badge-pill badge-secondary">{this.props.cartCount} </span>
+            <i className="fa badge" value={this.props.cartCount}>&#xf07a;</i>  Cart
           </NavLink>
         </li>
       </ul>

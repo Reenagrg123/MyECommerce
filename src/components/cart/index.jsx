@@ -1,14 +1,20 @@
 import React, { Component } from "react";
 import Product from "./product";
+import "./style.css";
+import { Redirect } from "react-router-dom";
+import ThanksShopping from "./thanksForShopping";
 
 class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       order: null,
-      totalPayable: 0
+      totalPayable: 0,
+      total: 0,
+      isClickedPlaceOrder: false
     };
   }
+
   componentDidMount() {
     this.getOrders();
   }
@@ -40,6 +46,7 @@ class Cart extends Component {
     //     <h1>Card is Empty</h1>
     // }
   };
+  //................................................................
 
   handleDelete = (orderId) => {
     var orders = JSON.parse(localStorage.getItem("orders"));
@@ -51,24 +58,37 @@ class Cart extends Component {
     localStorage.setItem("orders", JSON.stringify(orders));
     var totalProducts = orders[0].products.length;
 
-    // this.props.calculateCartCount(totalProducts);
+    this.props.calculateCartCount(totalProducts);
     // console.log(totalProducts);
   };
 
   handleTotalPayable = (total) => {
+    // this.setState({total:total});
     var { totalPayable } = this.state;
-    totalPayable = total + totalPayable;
+    console.log("Total:", total);
+
     console.log("Total payable:", totalPayable);
+
+    totalPayable = parseInt(total) + totalPayable;
+    console.log("Total payable:", totalPayable);
+    this.setState({ totalPayable: totalPayable });
   };
 
+  handlePlaceOrder = () => {
+    this.setState({ isClickedPlaceOrder: true });
+  };
+  //....................................................................
   render() {
-    const { order } = this.state;
+    console.log("cart props:", this.props);
+    const { order, totalPayable, isClickedPlaceOrder } = this.state;
     console.log(order);
 
+    let a;
     if (order != null) {
       console.log(order);
       return (
         <div>
+          {isClickedPlaceOrder && <ThanksShopping />}
           <table className="viewProducts">
             <tbody>
               <tr>
@@ -80,6 +100,7 @@ class Cart extends Component {
                 <th>Total</th>
                 <th></th>
               </tr>
+
               {order.map((product) => (
                 <Product
                   key={product.orderId}
@@ -90,6 +111,13 @@ class Cart extends Component {
               ))}
             </tbody>
           </table>
+          <hr></hr>
+          <h4 className="totalPay">Total Payable: {totalPayable}</h4>
+          <br></br>
+          <br></br>
+          <button className="placeOrder" onClick={this.handlePlaceOrder}>
+            Place Order
+          </button>
         </div>
       );
     } else return null;
