@@ -1,15 +1,25 @@
 import React, { Component } from "react";
-import {Modal,Button} from 'react-bootstrap';
+import { Modal, Button } from "react-bootstrap";
 
-const ThanksShopping = () => {
+const ThanksShopping = (props) => {
+  console.log("modal");
   return (
-    <Modal>
-      <Modal.header>
-        <Modal.Title>Thanks for Shopping!!</Modal.Title>
-      </Modal.header>
-      <Modal.Body>Your order will be deilevered in next 2-3 days.</Modal.Body>
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter"></Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <h4>
+          Thanks for Shopping!!. Your order will be delievered in next 2-3 days.
+        </h4>
+      </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary"></Button>
+        <Button onClick={() => props.onPlaceOrder(false)}>Close</Button>
       </Modal.Footer>
     </Modal>
   );

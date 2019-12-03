@@ -5,7 +5,7 @@ import Logout from "./login/logout";
 
 class NavBar extends Component {
   render() {
-    console.log("nav:", this.props.isLoggedIn);
+    // console.log("nav:", this.props.isLoggedIn);
 
     return (
       <ul className="navigation">

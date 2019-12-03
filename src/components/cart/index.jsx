@@ -7,11 +7,13 @@ import ThanksShopping from "./thanksForShopping";
 class Cart extends Component {
   constructor(props) {
     super(props);
+    this.tempPayable=0
     this.state = {
       order: null,
-      totalPayable: 0,
+    
       total: 0,
-      isClickedPlaceOrder: false
+      modalShow: false,
+      totalPayable:0
     };
   }
 
@@ -39,7 +41,6 @@ class Cart extends Component {
         (order) => order.userId === currentUserId
       );
 
-      // console.log("data", currentUserData.products);
       this.setState({ order: currentUserData.products });
     }
     // else{
@@ -62,33 +63,41 @@ class Cart extends Component {
     // console.log(totalProducts);
   };
 
-  handleTotalPayable = (total) => {
-    // this.setState({total:total});
-    var { totalPayable } = this.state;
-    console.log("Total:", total);
-
-    console.log("Total payable:", totalPayable);
-
-    totalPayable = parseInt(total) + totalPayable;
-    console.log("Total payable:", totalPayable);
-    this.setState({ totalPayable: totalPayable });
+  handleModalShow = (flag) => {
+    console.log("flag:", flag);
+    this.setState({ modalShow: flag });
   };
 
-  handlePlaceOrder = () => {
-    this.setState({ isClickedPlaceOrder: true });
-  };
+
+  handleTotalPayable=(prevTotal,total)=>{
+  var {tempPayable}=this;
+  console.log("Total:",total);
+
+  var newTotal=parseInt(total)+(tempPayable-prevTotal);
+  console.log("new total:",newTotal);
+  this.tempPayable=newTotal;
+  console.log("Temp payable:",this.tempPayable);
+
+  this.setState({totalPayable:this.tempPayable});
+}
+
   //....................................................................
   render() {
-    console.log("cart props:", this.props);
-    const { order, totalPayable, isClickedPlaceOrder } = this.state;
-    console.log(order);
+    // console.log("cart props:", this.props);
+    const { order, totalPayable, modalShow } = this.state;
+    // console.log(order);
 
-    let a;
     if (order != null) {
-      console.log(order);
+      // console.log(order);
+      // console.log(this.state.modalShow);
       return (
         <div>
-          {isClickedPlaceOrder && <ThanksShopping />}
+          {modalShow && (
+            <ThanksShopping
+              onPlaceOrder={this.handleModalShow}
+              show={modalShow}
+            />
+          )}
           <table className="viewProducts">
             <tbody>
               <tr>
@@ -106,7 +115,7 @@ class Cart extends Component {
                   key={product.orderId}
                   product={product}
                   onDelete={this.handleDelete}
-                  calculateTotalPayable={this.handleTotalPayable}
+                  handleTotalPayable={this.handleTotalPayable}
                 />
               ))}
             </tbody>
@@ -115,7 +124,10 @@ class Cart extends Component {
           <h4 className="totalPay">Total Payable: {totalPayable}</h4>
           <br></br>
           <br></br>
-          <button className="placeOrder" onClick={this.handlePlaceOrder}>
+          <button
+            className="placeOrder"
+            onClick={() => this.handleModalShow(true)}
+          >
             Place Order
           </button>
         </div>

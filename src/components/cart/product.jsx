@@ -4,34 +4,67 @@ import CountHandler from "../reusable/countHandler";
 class Product extends Component {
   constructor(props) {
     super(props);
+    this.quantityFlag = "";
     this.state = {
-      total: this.props.product.price
+      total: this.props.product.price,
+      countQuantity: 1
     };
   }
-  
-  componentDidMount(){
-    const {total}=this.state;
-    this.props.calculateTotalPayable(total);
 
-  }
-  componentDidUpdate(prevProps,prevState){
-    const {total}=this.state;
-    if(total!=prevState.total){
-      this.props.calculateTotalPayable(total);
-    }
-  }
-
-  handleTotal = (quantity) => {
-    // console.log(quantity);
-    const {price}=this.props.product;
+  componentDidMount() {
+    const { total } = this.state;
+    const { price } = this.props.product;
     const priceInt = parseInt(price);
-    // console.log(typeof price);
-    const total = quantity * priceInt;
-    console.log("Total:", total);
-    this.setState({ total: total });
-    this.props.calculateTotalPayable(quantity,priceInt);
+
+    this.props.handleTotalPayable(0,total);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {total}=this.state;
+    if (this.state.countQuantity != prevState.countQuantity) {
+      this.handleTotal();
+    }
+    if (this.state.total != prevState.total) {
+      this.props.handleTotalPayable(prevState.total,total);
+    }
+
+  }
+  //........................................................................................
+
+  handleIncrement = (quantity) => {
+    const { countQuantity } = this.state;
+    if (countQuantity < quantity) {
+      this.setState((prevState, props) => {
+        return { countQuantity: prevState.countQuantity + 1 };
+      });
+    }
   };
 
+  handleDecrement = (quantity) => {
+    const { countQuantity } = this.state;
+
+    if (countQuantity >= 2) {
+      this.setState((prevState, props) => {
+        return { countQuantity: prevState.countQuantity - 1 };
+      });
+    }
+  };
+  //..................................................................................
+  handleTotal = () => {
+    const { price } = this.props.product;
+    const { countQuantity } = this.state;
+    const priceInt = parseInt(price);
+    // console.log(typeof price);
+    const total = countQuantity * priceInt;
+    console.log("Total:", total);
+    this.setState({ total: total });
+
+    console.log("price", priceInt);
+  };
+
+  
+
+  //.....................................................................................
   render() {
     const {
       category,
@@ -42,7 +75,7 @@ class Product extends Component {
       orderId
     } = this.props.product;
 
-    const { total } = this.state;
+    const { total, countQuantity } = this.state;
     const { onDelete } = this.props;
 
     return (
@@ -58,7 +91,9 @@ class Product extends Component {
           {
             <CountHandler
               quantity={quantity}
-              calculateTotal={this.handleTotal}
+              onIncrement={this.handleIncrement}
+              onDecrement={this.handleDecrement}
+              countQuantity={countQuantity}
             />
           }
         </td>
