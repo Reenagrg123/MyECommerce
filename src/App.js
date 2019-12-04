@@ -16,7 +16,8 @@ import Home from "./components/home";
 import NotFound from "./components/notfound";
 import LogOut from "./components/login/logout";
 import ProductDetail from "./components/admin/productdetail";
-import ThanksShopping from './components/cart/thanksForShopping';
+import ThanksShopping from "./components/cart/thanksForShopping";
+import { getCurrentUserOrder } from "./components/getCurrentUserOrder";
 
 import {
   AdminPrivateRoute,
@@ -27,15 +28,20 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
+      // isLoggedIn: false,
       userRole: "",
-      cartCount:0
+      cartCount: 0
     };
   }
-  componentDidMount(){
-    var orders=JSON.parse(localStorage.getItem("orders"));
-    var totalProducts = orders[0].products.length;
-    this.setState({cartCount:totalProducts});
+  componentDidMount() {
+    var orders = JSON.parse(localStorage.getItem("orders"));
+    var orderIndex = getCurrentUserOrder();
+    var currentUserData = orders[orderIndex];
+    // console.log("current user data:", currentUserData);
+
+    if (currentUserData) {
+      this.setState({ cartCount: currentUserData.products.length });
+    }
   }
 
   updateLoginStatus = () => {
@@ -60,20 +66,16 @@ class App extends Component {
     this.setState({ userRole: userRole });
   };
 
-
-  handleCartCount=(count)=>{
-    console.log("cartCount:",count);
-    this.setState({cartCount:count});
-    console.log("cartCount:",count);
-
-  }
-
-  
+  handleCartCount = (count) => {
+    console.log("cartCount:", count);
+    this.setState({ cartCount: count });
+    console.log("cartCount:", count);
+  };
 
   //................................................................................
   render() {
     // console.log("In App:", this.state.isLoggedIn);
-    const { isLoggedIn, userRole,cartCount } = this.state;
+    const { isLoggedIn, userRole, cartCount } = this.state;
     return (
       <Router>
         <NavBar isLoggedIn={isLoggedIn} cartCount={cartCount}></NavBar>
@@ -92,7 +94,9 @@ class App extends Component {
             component={ProductDetail}
           ></AdminPrivateRoute>
 
-          <Route path="/shop"><Shop calculateCartCount={this.handleCartCount}></Shop></Route>
+          <Route path="/shop">
+            <Shop calculateCartCount={this.handleCartCount} isLoggedIn={isLoggedIn}></Shop>
+          </Route>
 
           <Route path="/login">
             <SelectUser
@@ -112,9 +116,12 @@ class App extends Component {
           )}
 
           <Route path="/register" component={Register} />
-          <UserPrivateRoute path="/cart" component={() => <Cart calculateCartCount={this.handleCartCount} />} />
+          <UserPrivateRoute
+            path="/cart"
+            component={() => <Cart calculateCartCount={this.handleCartCount} />}
+          />
           <Route path="/thanks" component={ThanksShopping}></Route>
-          
+
           <Route component={NotFound}></Route>
         </Switch>
       </Router>

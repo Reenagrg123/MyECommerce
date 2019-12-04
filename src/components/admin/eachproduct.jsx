@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ViewProducts from "./viewproducts";
 import ProductDetail from "./productdetail";
+import { Redirect } from "react-router";
 
 class EachProduct extends Component {
   constructor(props) {
@@ -10,11 +11,28 @@ class EachProduct extends Component {
     };
   }
 
+  //.....................................................................................................
+  handleView = () => {
+    console.log("handle view");
+    this.setState({ isClickedView: true });
+  };
+
+  //..................................................................................................
   render() {
     const { product, onDelete, onView } = this.props;
-    const { category, productName, quantity, price } = this.props.product;
+    const {
+      category,
+      productName,
+      quantity,
+      price,
+      productId
+    } = this.props.product;
+    const { isClickedView } = this.state;
+
     return (
       <tr>
+        {isClickedView && <Redirect to={`/product/${productId}`} />}
+
         {this.props.children}
         <td>{category}</td>
         <td> {productName}</td>
@@ -26,7 +44,7 @@ class EachProduct extends Component {
             name="view"
             className="greybtn"
             onClick={() => {
-              onView(product);
+              this.handleView();
             }}
           >
             <i className="fa fa-eye"></i>

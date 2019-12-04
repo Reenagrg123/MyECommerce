@@ -15,16 +15,16 @@ class AdminDashboard extends Component {
       isClickedViewProducts: false
     };
   }
-  
+  //.................................................................................................
 
   handleClick = (event) => {
-    // console.log(event.target.name);
     if (event.target.name == "addProducts") {
       this.setState({ isClickedAddProducts: true });
     } else if (event.target.name == "viewProducts") {
       this.setState({ isClickedViewProducts: true });
     }
   };
+  //................................................................................................
 
   render() {
     return (

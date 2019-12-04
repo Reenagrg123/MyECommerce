@@ -16,18 +16,19 @@ class Product extends Component {
     const { price } = this.props.product;
     const priceInt = parseInt(price);
 
-    this.props.handleTotalPayable(0,total);
+    this.props.handleTotalPayable(0, total);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {total}=this.state;
-    if (this.state.countQuantity != prevState.countQuantity) {
+    const { total, countQuantity } = this.state;
+    if (countQuantity != prevState.countQuantity) {
       this.handleTotal();
+     
+      // this.props.updateOrderQuantity(countQuantity);
     }
     if (this.state.total != prevState.total) {
-      this.props.handleTotalPayable(prevState.total,total);
+      this.props.handleTotalPayable(prevState.total, total);
     }
-
   }
   //........................................................................................
 
@@ -49,7 +50,7 @@ class Product extends Component {
       });
     }
   };
-  //..................................................................................
+
   handleTotal = () => {
     const { price } = this.props.product;
     const { countQuantity } = this.state;
@@ -61,8 +62,6 @@ class Product extends Component {
 
     console.log("price", priceInt);
   };
-
-  
 
   //.....................................................................................
   render() {

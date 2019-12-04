@@ -14,10 +14,11 @@ class AddProducts extends Component {
       price: "",
       selectedFile: "",
       isItemAdded: false,
-      isClickedBack:false
+      isClickedBack: false
     };
   }
 
+  //....................................................................................
   handleChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
@@ -26,7 +27,6 @@ class AddProducts extends Component {
 
   handleChangeFile = (event) => {
     var file = event.target.files[0]["name"];
-    // console.log(file);
     this.setState({ selectedFile: file });
   };
 
@@ -34,7 +34,6 @@ class AddProducts extends Component {
     event.preventDefault();
     var productId = localStorage.getItem("productId");
     localStorage.setItem("productId", ++productId);
-    // this.setState({ productId: productId });
 
     var myProduct = {
       ...this.state
@@ -45,41 +44,32 @@ class AddProducts extends Component {
     console.log("New product", myProduct);
 
     var productsData = JSON.parse(localStorage.getItem("products"));
-    // console.log("Storage data: ", productsData);
-
     var tempData = [];
 
     if (productsData === null) {
-      // console.log("first item");
       tempData.push(myProduct);
       localStorage.setItem("products", JSON.stringify(tempData));
     } else {
-      // productsData.map(product=>tempData.push(product));
       productsData.map((product) => tempData.push(product));
-
       tempData.push(myProduct);
-      // console.log("tempdata:", tempData);
-
       localStorage.setItem("products", JSON.stringify(tempData));
     }
 
     alert("Product added successfully");
-    // this.props.history.push('/admin');
     this.setState({ isItemAdded: true });
   };
 
-  handleBack=(event)=>{
-    this.setState({isClickedBack:true});
-  }
+  handleBack = (event) => {
+    this.setState({ isClickedBack: true });
+  };
 
+  //........................................................................................
   render() {
-    // console.log(this.state.isItemAdded);
-    const {isItemAdded,isClickedBack}=this.state;
+    const { isItemAdded, isClickedBack } = this.state;
     return (
       <React.Fragment>
-      {isClickedBack && this.props.history.push('/admin')}
+        {isClickedBack && this.props.history.push("/admin")}
         {isItemAdded ? (
-          // window.open('/admin/');
           <Redirect to="/admin"></Redirect>
         ) : (
           <div>
@@ -90,8 +80,13 @@ class AddProducts extends Component {
                   <u>Add Product</u>
                 </b>
               </center>
-              
-             <input type="button" className="button" value="<--Back to DashBoard" onClick={this.handleBack}></input>
+
+              <input
+                type="button"
+                className="button"
+                value="<--Back to DashBoard"
+                onClick={this.handleBack}
+              ></input>
             </h2>
             <form className="form" onSubmit={this.handleSubmit}>
               <label>

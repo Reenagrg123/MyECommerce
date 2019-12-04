@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Card from "./card";
 
+import { Redirect } from "react-router";
+
 class Shop extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,9 @@ class Shop extends Component {
       footwearsData: null,
       menData: null,
       womenData: null,
-      searchData: ""
+      searchData: "",
+      isAllowedToAddCart: false,
+      addedToCart: false
     };
   }
 
@@ -80,7 +84,12 @@ class Shop extends Component {
 
   handleCartClick = (product) => {
     //getting the adding to cart product
-    console.log(product);
+    // console.log(product);
+    if (!this.props.isLoggedIn) {
+      console.log("not logged in");
+      this.setState({ isAllowedToAddCart: true });
+      return;
+    }
     // product.quantity=1;
 
     //setting orderId
@@ -112,23 +121,66 @@ class Shop extends Component {
       console.log("hdh", temp);
       localStorage.setItem("orders", JSON.stringify(temp));
     } else {
-      orders[0].products.push(product);
-      console.log(orders[0]);
-      temp.push(orders[0]);
-      console.log("hdh", temp);
-      localStorage.setItem("orders", JSON.stringify(temp));
-    }
-    console.log("products:", orders[0].products);
-    var totalProducts = orders[0].products.length;
+      for (let i = 0; i < orders.length; i++) {
+        if (orders[i].userId === currentUserId) {
+          if (
+            !orders[i].products.find(
+              (Product) => Product.productId === product.productId
+            )
+          ) {
+            console.log("Found");
+            orders[i].products.push(product);
+            console.log(orders[i]);
 
-    this.props.calculateCartCount(totalProducts);
-    console.log(totalProducts);
-    alert("Added to cart");
+            // temp.push(orders);
+            orders.map((order) => temp.push(order));
+            console.log("hdh", temp);
+            localStorage.setItem("orders", JSON.stringify(temp));
+            var totalProducts = orders[i].products.length;
+
+            this.props.calculateCartCount(totalProducts);
+            console.log(totalProducts);
+            console.log("products:", orders[i].products);
+            this.setState({ addedToCart: true });
+            alert("Added to cart");
+
+            return;
+          } else {
+            alert("Already added to cart");
+
+            return;
+          }
+        }
+      }
+      console.log("temp:", temp);
+      orders.map((order) => temp.push(order));
+      console.log("temp:", temp);
+      var order = { userId: null, products: [] };
+      order.userId = currentUserId;
+      order.products.push(product);
+      temp.push(order);
+      console.log("temp:", temp);
+      localStorage.setItem("orders", JSON.stringify(temp));
+
+      // console.log("products:", orders[0].products);
+      // var totalProducts = orders[orders.length-1].products.length;
+
+      // this.props.calculateCartCount(totalProducts);
+      // console.log(totalProducts);
+      alert("Added to cart");
+    }
   };
 
   //................................................................................................
   render() {
-    const { electronicsData, footwearsData, menData, womenData } = this.state;
+    const {
+      electronicsData,
+      footwearsData,
+      menData,
+      womenData,
+      isAllowedToAddCart,
+      addedToCart
+    } = this.state;
     if (
       electronicsData != null &&
       footwearsData != null &&
@@ -137,6 +189,7 @@ class Shop extends Component {
     ) {
       return (
         <React.Fragment>
+          {isAllowedToAddCart && <Redirect to="/login" />}
           <hr></hr>
           <center>
             <input
@@ -155,7 +208,7 @@ class Shop extends Component {
           </center>
           <br></br>
           <br></br>
-          <h1 className="categoryHeading">
+          <h1 className="categoryHeading" id="electronics">
             <center>----Electronics----</center>
           </h1>
           <br></br>
@@ -166,11 +219,12 @@ class Shop extends Component {
                 product={product}
                 key={product.productId}
                 onCartClick={this.handleCartClick}
+                addedToCart={addedToCart}
               />
             ))}
           </div>
           <hr></hr>
-          <h1 className="categoryHeading">
+          <h1 className="categoryHeading" id="footwears">
             <center>----Footwears----</center>
           </h1>
           <br></br>
@@ -181,11 +235,12 @@ class Shop extends Component {
                 product={product}
                 key={product.productId}
                 onCartClick={this.handleCartClick}
+                addedToCart={addedToCart}
               />
             ))}
           </div>
           <hr></hr>
-          <h1 className="categoryHeading">
+          <h1 className="categoryHeading" id="men">
             <center>----Men's----</center>
           </h1>
           <br></br>
@@ -196,11 +251,12 @@ class Shop extends Component {
                 product={product}
                 key={product.productId}
                 onCartClick={this.handleCartClick}
+                addedToCart={addedToCart}
               />
             ))}
           </div>
           <hr></hr>
-          <h1 className="categoryHeading">
+          <h1 className="categoryHeading" id="women">
             <center>----Women's----</center>
           </h1>
           <br></br>
@@ -211,6 +267,7 @@ class Shop extends Component {
                 product={product}
                 key={product.productId}
                 onCartClick={this.handleCartClick}
+                addedToCart={addedToCart}
               />
             ))}
           </div>

@@ -7,7 +7,6 @@ class Card extends Component {
     super(props);
     this.state = {
       isClickedCart: false,
-      isLoggedIn: false
     };
   }
 
@@ -19,7 +18,7 @@ class Card extends Component {
       price,
       selectedFile
     } = this.props.product;
-    const {onCartClick,product}=this.props;
+    const {onCartClick,product,addedToCart}=this.props;
 
     return (
       <div className="card">

@@ -1,22 +1,25 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router";
 
 class ProductDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      requiredProduct: null
+      requiredProduct: null,
+      isClickedBack: false
     };
   }
+
   componentDidMount() {
     const paramId = this.props.match.params.id;
     console.log(paramId);
     if (paramId) {
       this.fetchData(paramId);
-    }
-    else{
+    } else {
       console.log(this.props.location);
     }
   }
+  //...................................................................................
   fetchData = (paramId) => {
     var products = JSON.parse(localStorage.getItem("products"));
     var requiredProduct = products.filter(
@@ -26,10 +29,15 @@ class ProductDetail extends Component {
     this.setState({ requiredProduct: requiredProduct[0] });
   };
 
+  handleBack = () => {
+    this.setState({ isClickedBack: true });
+  };
+
+  //....................................................................
   render() {
     const { requiredProduct } = this.state;
 
-    if (requiredProduct != null ) {
+    if (requiredProduct != null) {
       console.log("in");
       const {
         category,
@@ -38,9 +46,11 @@ class ProductDetail extends Component {
         price,
         selectedFile
       } = requiredProduct;
+      const { isClickedBack } = this.state;
       console.log(category);
       return (
         <div class="jumbotron">
+          {isClickedBack && <Redirect to="/viewproducts" />}
           <img
             class="productImage"
             src={require(`../Images/ProductItems/${category}/${selectedFile}`)}
@@ -67,7 +77,7 @@ class ProductDetail extends Component {
             type="button"
             class="button"
             value="Back to All Products"
-            onClick={this.props.onBack}
+            onClick={this.handleBack}
           ></input>
         </div>
       );
