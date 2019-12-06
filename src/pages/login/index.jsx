@@ -12,6 +12,7 @@ class SelectUser extends Component {
     };
   }
 
+  //....................................................................................
   handleChange = (event) => {
     this.setState({ whichUser: event.target.value });
   };
@@ -19,17 +20,24 @@ class SelectUser extends Component {
     console.log(this.state.whichUser);
     this.setState({ isClickedNext: true });
   };
+
+  //.......................................................................................
   render() {
-    // console.log("hfjhfj",this.props.location);
-    console.log("Selectuser", this.props.isLoggedIn);
+    const { whichUser, isClickedNext } = this.state;
+    const {
+      isLoggedIn,
+      loginStatus,
+      calculateCartCount,
+      getUserRole
+    } = this.props;
     return (
       <div>
-        {this.state.isClickedNext ? (
+        {isClickedNext ? (
           <Login
-            userRole={this.state.whichUser}
-            isLoggedIn={this.props.isLoggedIn}
-            loginStatus={this.props.loginStatus}
-            calculateCartCount={this.props.calculateCartCount}
+            userRole={whichUser}
+            isLoggedIn={isLoggedIn}
+            loginStatus={loginStatus}
+            calculateCartCount={calculateCartCount}
           />
         ) : (
           <form className="form" onSubmit={this.handleSubmit}>
@@ -65,7 +73,7 @@ class SelectUser extends Component {
               type="submit"
               className="button"
               value="Next"
-              onClick={() => this.props.getUserRole(this.state.whichUser)}
+              onClick={() => getUserRole(whichUser)}
             ></input>
           </form>
         )}

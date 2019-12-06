@@ -13,7 +13,7 @@ class Card extends Component {
   //.........................................................................................
   render() {
     const { category, productName, price, selectedFile } = this.props.product;
-    const { onCartClick, product, addedToCart } = this.props;
+    const { onCartClick, product } = this.props;
 
     return (
       <div className="card">

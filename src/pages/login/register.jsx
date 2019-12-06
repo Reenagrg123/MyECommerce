@@ -11,6 +11,7 @@ class Register extends Component {
       isRegister: false
     };
   }
+  //................................................................................
   handleChange = (event) => {
     var name = event.target.name;
     var value = event.target.value;
@@ -21,8 +22,8 @@ class Register extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     var users = JSON.parse(localStorage.getItem("Users"));
-    console.log("data:", users);
 
+    //cloning the state data(from data) to new object so that we can add userId manually to that object
     var newUser = { ...this.state };
     var userId = JSON.parse(localStorage.getItem("userId"));
 
@@ -44,6 +45,8 @@ class Register extends Component {
       "You are registered successfully.Now you can login to continue with shopping!!"
     );
   };
+
+  //..........................................................................................
 
   render() {
     const { isRegister } = this.state;

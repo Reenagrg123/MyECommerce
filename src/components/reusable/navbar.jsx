@@ -39,7 +39,7 @@ class NavBar extends Component {
             Cart
           </NavLink>
         </li>
-        {userRole == "admin" && isLoggedIn && (
+        {userRole === "admin" && isLoggedIn && (
           <li>
             <NavLink to="/admin" activeClassName=" activeClass">
               Admin

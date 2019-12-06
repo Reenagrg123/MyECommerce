@@ -29,13 +29,7 @@ class Login extends Component {
       userRole: this.props.userRole
     });
   }
-  // ..................................
-  handleRegister = () => {
-    this.setState({
-      isClickedRegister: true
-    });
-  };
-  //.............................
+  // ...................................................................................................
   handleChange = (event) => {
     let name = event.target.name;
     let value = event.target.value;
@@ -43,7 +37,13 @@ class Login extends Component {
       [name]: value
     });
   };
-  //..................................
+
+  handleRegister = () => {
+    this.setState({
+      isClickedRegister: true
+    });
+  };
+
   handleLogin = (event) => {
     const { username, password, isAuthenticated, userRole } = this.state;
     event.preventDefault();
@@ -51,30 +51,25 @@ class Login extends Component {
     if (userRole == "admin") {
       this.getAdminCredentials();
       this.isAuth = this.isAuthenticated();
-      //console.log("gdhgdhg", this.isAuth);
     } else {
       this.isAuth = this.getUserCredentials();
     }
-    //console.log("ghgdgh", this.isAuth);
     this.setLoginStatus(this.isAuth);
   };
 
-  //..........................................
+  //......................................................................................
   getAdminCredentials = () => {
     var credentials = "";
     if (this.state.userRole === "admin") {
       credentials = JSON.parse(localStorage.getItem("Admin"));
     }
-    console.log(credentials);
     this.username = credentials.username;
     this.password = credentials.password;
   };
 
-  //.............................................
   getUserCredentials = () => {
     this.users = JSON.parse(localStorage.getItem("Users"));
-    //console.log(this.users.find(this.iterateUsers));
-    // var currentUser = this.users.find(this.iterateUsers);
+
     if (this.users) {
       if (this.users.find(this.iterateUsers)) {
         return true;
@@ -82,30 +77,24 @@ class Login extends Component {
     }
   };
 
-  //...........................................
   iterateUsers = (user) => {
-    //console.log("user:", user);
     this.username = user.username;
     this.password = user.password;
-    //console.log("username:", this.username);
-    //console.log("password:", this.password);
 
     if (this.isAuthenticated()) {
       return true;
     }
   };
 
-  //............................................
+  //..........................................................................
   isAuthenticated = () => {
     const { username, password } = this.state;
     if (username == this.username && password == this.password) {
-      // console.log("equal");
       return true;
     }
   };
 
   setLoginStatus = (isAuth) => {
-    //console.log("IsAuth: ", this.isAuth);
     if (this.isAuth) {
       this.setSession();
       this.props.loginStatus();
@@ -118,31 +107,29 @@ class Login extends Component {
 
   setSession = () => {
     const currentUser = {};
+    const { userRole } = this.state;
 
     currentUser.username = this.state.username;
     currentUser.password = this.state.password;
     console.log("currentUser: ", currentUser);
 
-    if (this.state.userRole === "admin")
-      localStorage.setItem("adminSession", JSON.stringify(currentUser));
-    else {
-      localStorage.setItem("userSession", JSON.stringify(currentUser));
-      setTimeout(() => this.updateCount(), 50);
-    }
+    localStorage.setItem("session", JSON.stringify(currentUser));
+    localStorage.setItem("currentUserRole", JSON.stringify(userRole));
+    setTimeout(() => this.updateCount(), 50);
   };
 
+  //update the cart count whenever a user logged in
   updateCount = () => {
     var orders = JSON.parse(localStorage.getItem("orders"));
     var orderIndex = getCurrentUserOrder();
     var currentUserData = orders[orderIndex];
-    // console.log("current user data:", currentUserData);
     if (currentUserData) {
       this.setState({ order: currentUserData.products });
       this.props.calculateCartCount(currentUserData.products.length);
     }
   };
 
-  //..............................................
+  //........................................................................................
   render() {
     const {
       username,
@@ -152,7 +139,6 @@ class Login extends Component {
       userRole,
       isClickedRegister
     } = this.state;
-    console.log("In login", this.props.isLoggedIn);
 
     return (
       <React.Fragment>

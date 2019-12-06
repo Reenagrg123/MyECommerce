@@ -6,7 +6,8 @@ const AdminPrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        localStorage.getItem("adminSession") ? (
+        localStorage.getItem("session") &&
+        JSON.parse(localStorage.getItem("currentUserRole")) === "admin" ? (
           <Component {...props} />
         ) : (
           <Redirect to="/login" />
@@ -21,7 +22,8 @@ const UserPrivateRoute = ({ component: Component }) => {
   return (
     <Route
       render={(props) =>
-        localStorage.getItem("userSession") ? (
+        localStorage.getItem("session") &&
+        JSON.parse(localStorage.getItem("currentUserRole")) === "user" ? (
           <Component {...props} />
         ) : (
           <Redirect to="/login" />

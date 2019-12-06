@@ -22,18 +22,24 @@ class ViewProducts extends Component {
     var productsData = this.getProductsData();
     console.log("Data:", this.state.productsData);
     this.setState({ productsData: productsData });
+    console.log(this.props.location.search);
   }
   //...............................................................................................
 
+
+  //getting all products data
   getProductsData = () => {
     var productsData = JSON.parse(localStorage.getItem("products"));
     return productsData;
   };
 
+  //setting the page no on clicking a particular page
   handlePageClick = (pageNumber) => {
     this.setState({ currentPage: pageNumber });
   };
 
+
+  //getting the current page products
   getCurrentProducts = () => {
     const { productsData, isClickedView, currentPage, product } = this.state;
     const indexOfLastProduct = currentPage * this.productsPerPage;
@@ -42,7 +48,7 @@ class ViewProducts extends Component {
       indexOfFirstProduct,
       indexOfLastProduct
     );
-    console.log("currentProducts:", currentProducts);
+   // console.log("currentProducts:", currentProducts);
     this.currentProducts = currentProducts;
   };
   //..............................................................................................
@@ -52,8 +58,6 @@ class ViewProducts extends Component {
     var productsData = this.getProductsData();
     console.log(id);
     newData = productsData.filter((product) => id != product.productId);
-    console.log(newData);
-    // this.setState(productsData:newData);
     localStorage.setItem("products", JSON.stringify(newData));
     this.setState({ productsData: newData });
     alert("Product deleted successfully");

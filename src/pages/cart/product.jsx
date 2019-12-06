@@ -16,15 +16,16 @@ class Product extends Component {
     const { price } = this.props.product;
     const priceInt = parseInt(price);
 
+    //initially prev total is 0
     this.props.handleTotalPayable(0, total);
   }
 
+  //updatee the total whenever quantity updates
   componentDidUpdate(prevProps, prevState) {
     const { total, countQuantity } = this.state;
     if (countQuantity != prevState.countQuantity) {
       this.handleTotal();
 
-      // this.props.updateOrderQuantity(countQuantity);
     }
     if (this.state.total != prevState.total) {
       this.props.handleTotalPayable(prevState.total, total);
@@ -55,12 +56,9 @@ class Product extends Component {
     const { price } = this.props.product;
     const { countQuantity } = this.state;
     const priceInt = parseInt(price);
-    // console.log(typeof price);
     const total = countQuantity * priceInt;
-    console.log("Total:", total);
-    this.setState({ total: total });
 
-    console.log("price", priceInt);
+    this.setState({ total: total });
   };
 
   //.....................................................................................

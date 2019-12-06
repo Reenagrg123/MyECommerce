@@ -22,23 +22,19 @@ class Shop extends Component {
   componentDidMount() {
     this.getAllProducts();
   }
-
+  //................................................................................................
   //get All products from localstorage
   getAllProducts = () => {
     var productsData = JSON.parse(localStorage.getItem("products"));
-    //  productsData.map(product=>delete product.quantity);
 
-    //console.log("cbbd", productsData);
     this.setState({ productsData: productsData }, () => {
       this.getCategory();
-      //console.log("hello");
     });
   };
 
   //Filtering the data based on Category
   getCategory = () => {
     const { productsData } = this.state;
-    // console.log(productsData);
     var electronicsData = productsData.filter(
       (data) => data.category === "Electronics"
     );
@@ -82,103 +78,95 @@ class Shop extends Component {
     }
   };
 
+  //Handling add to cart
   handleCartClick = (product) => {
     //getting the adding to cart product
-    // console.log(product);
     if (!this.props.isLoggedIn) {
       this.setState({ isAllowedToAddCart: true });
       return;
     }
-    // product.quantity=1;
 
     //setting orderId
     var orderId = JSON.parse(localStorage.getItem("orderId"));
     product["orderId"] = ++orderId;
     localStorage.setItem("orderId", JSON.stringify(orderId));
 
+    //If the current loggedIn user is a registered user,then only he/she can add to cart otherwise he/she has to register first
     //finding userId of loggedIn user
-    var userSession = JSON.parse(localStorage.getItem("userSession"));
-    if(userSession){
 
-    
-    const username = userSession.username;
-    const password = userSession.password;
-    var users = JSON.parse(localStorage.getItem("Users"));
-    var currentUser = users.find(
-      (user) =>
-        user.username == userSession.username &&
-        user.password == userSession.password
-    );
-    const currentUserId = currentUser.userId;
+    if (JSON.parse(localStorage.getItem("currentUserRole")) === "user") {
+      var userSession = JSON.parse(localStorage.getItem("session"));
 
-    var orders = JSON.parse(localStorage.getItem("orders"));
-    console.log("orders:", orders);
+      const username = userSession.username;
+      const password = userSession.password;
+      var users = JSON.parse(localStorage.getItem("Users"));
+      var currentUser = users.find(
+        (user) =>
+          user.username == userSession.username &&
+          user.password == userSession.password
+      );
+      const currentUserId = currentUser.userId;
 
-    var temp = [];
-    if (orders === null) {
-      var order = { userId: null, products: [] };
-      order.userId = currentUserId;
-      order.products.push(product);
-      temp.push(order);
-      // console.log("hdh", temp);
-      localStorage.setItem("orders", JSON.stringify(temp));
-    } else {
-      for (let i = 0; i < orders.length; i++) {
-        if (orders[i].userId === currentUserId) {
-          if (
-            !orders[i].products.find(
-              (Product) => Product.productId === product.productId
-            )
-          ) {
-            // console.log("Found");
-            orders[i].products.push(product);
-            console.log(orders[i]);
+      var orders = JSON.parse(localStorage.getItem("orders"));
+      console.log("orders:", orders);
 
-            // temp.push(orders);
-            orders.map((order) => temp.push(order));
-            console.log("hdh", temp);
-            localStorage.setItem("orders", JSON.stringify(temp));
-            var totalProducts = orders[i].products.length;
+      var temp = [];
 
-            
-            // console.log(totalProducts);
-            console.log("products:", orders[i].products);
-            this.setState({ addedToCart: true });
-            this.props.calculateCartCount(totalProducts);
-            alert("Added to cart");
+      //If this is the first order
+      if (orders === null) {
+        var order = { userId: null, products: [] };
+        order.userId = currentUserId;
+        order.products.push(product);
+        temp.push(order);
+        localStorage.setItem("orders", JSON.stringify(temp));
+      }
+      //else find that userId in the orders and then add his/her products at that userid
+      else {
+        for (let i = 0; i < orders.length; i++) {
+          if (orders[i].userId === currentUserId) {
+            if (
+              !orders[i].products.find(
+                (Product) => Product.productId === product.productId
+              )
+            ) {
+              orders[i].products.push(product);
+              console.log(orders[i]);
 
-            return;
-          } else {
-            alert("Already added to cart");
+              orders.map((order) => temp.push(order));
+              console.log("hdh", temp);
+              localStorage.setItem("orders", JSON.stringify(temp));
+              var totalProducts = orders[i].products.length;
 
-            return;
+              console.log("products:", orders[i].products);
+              this.setState({ addedToCart: true });
+              this.props.calculateCartCount(totalProducts);
+              alert("Added to cart");
+
+              return;
+            } //if that product is already added to cart then don't add again,simply give an alert and return
+            else {
+              alert("Already added to cart");
+
+              return;
+            }
           }
         }
+        orders.map((order) => temp.push(order));
+        var order = { userId: null, products: [] };
+        order.userId = currentUserId;
+        order.products.push(product);
+        temp.push(order);
+        localStorage.setItem("orders", JSON.stringify(temp));
+        //when user add 1st product to cart then set cartcount to 1
+        this.props.calculateCartCount(1);
+
+        alert("Added to cart");
       }
-      console.log("temp:", temp);
-      orders.map((order) => temp.push(order));
-      console.log("temp:", temp);
-      var order = { userId: null, products: [] };
-      order.userId = currentUserId;
-      order.products.push(product);
-      temp.push(order);
-      console.log("temp:", temp);
-      localStorage.setItem("orders", JSON.stringify(temp));
-      console.log(totalProducts);
-      this.props.calculateCartCount(1);
-      
-
-      // console.log("products:", orders[0].products);
-      // var totalProducts = orders[orders.length-1].products.length;
-
-      // this.props.calculateCartCount(totalProducts);
-      // console.log(totalProducts);
-      alert("Added to cart");
     }
-  }
-  else{
-    alert("Please register to continue with shopping..");
-  }
+    //If the loggedIn user is admin
+    else {
+      alert("Please register to continue with shopping..");
+    }
   };
 
   //................................................................................................

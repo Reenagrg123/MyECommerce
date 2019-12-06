@@ -25,12 +25,11 @@ class AdminDashboard extends Component {
   //................................................................................................
 
   render() {
+    const { isClickedAddProducts, isClickedViewProducts } = this.state;
     return (
       <div>
-        {this.state.isClickedAddProducts &&
-          this.props.history.push("/addProducts")}
-        {this.state.isClickedViewProducts &&
-          this.props.history.push("/viewProducts")}
+        {isClickedAddProducts && this.props.history.push("/addProducts")}
+        {isClickedViewProducts && this.props.history.push("/viewProducts")}
 
         <Fragment>
           <h2>

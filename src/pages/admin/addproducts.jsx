@@ -25,23 +25,25 @@ class AddProducts extends Component {
     this.setState({ [name]: value });
   };
 
+  //handler for Image only
   handleChangeFile = (event) => {
     var file = event.target.files[0]["name"];
     this.setState({ selectedFile: file });
   };
 
+  //submitting the form
   handleSubmit = (event) => {
     event.preventDefault();
     var productId = localStorage.getItem("productId");
     localStorage.setItem("productId", ++productId);
 
+    //cloning the state data(form data) for to store into localstorage
     var myProduct = {
       ...this.state
     };
 
+    //setting the productId manually with the help of localstorage
     myProduct["productId"] = productId;
-    console.log("PId", myProduct.productId);
-    console.log("New product", myProduct);
 
     var productsData = JSON.parse(localStorage.getItem("products"));
     var tempData = [];
@@ -52,13 +54,13 @@ class AddProducts extends Component {
     } else {
       productsData.map((product) => tempData.push(product));
       tempData.push(myProduct);
-      //localStorage.setItem("products", JSON.stringify(tempData));
     }
 
     alert("Product added successfully");
     this.setState({ isItemAdded: true });
   };
 
+  //Back to dashboard
   handleBack = (event) => {
     this.setState({ isClickedBack: true });
   };

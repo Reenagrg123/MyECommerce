@@ -2,14 +2,16 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
 const LogOut = (props) => {
-  const { userRole } = props;
-  props.loginStatus();
+  const { loginStatus } = props;
 
-  if (userRole == "admin") {
-    localStorage.removeItem("adminSession");
-  } else {
-    localStorage.removeItem("userSession");
-  }
+  //updating the login status to false
+  loginStatus();
+
+  //removing the session info from localstorage
+  localStorage.removeItem("session");
+  localStorage.removeItem("currentUserRole");
+
+  //setting the count to 0 on logout
   props.calculateCartCount(0);
   alert("Logout successfully");
 
