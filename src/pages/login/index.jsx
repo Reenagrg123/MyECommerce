@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Login from "./login";
-import "./style.css";
+import "./style.scss";
 
 class SelectUser extends Component {
   constructor(props) {
@@ -21,16 +21,20 @@ class SelectUser extends Component {
   };
   render() {
     // console.log("hfjhfj",this.props.location);
-  console.log("Selectuser",this.props.isLoggedIn);
+    console.log("Selectuser", this.props.isLoggedIn);
     return (
       <div>
-
         {this.state.isClickedNext ? (
-          <Login userRole={this.state.whichUser} isLoggedIn={this.props.isLoggedIn} loginStatus={this.props.loginStatus}/>
+          <Login
+            userRole={this.state.whichUser}
+            isLoggedIn={this.props.isLoggedIn}
+            loginStatus={this.props.loginStatus}
+            calculateCartCount={this.props.calculateCartCount}
+          />
         ) : (
           <form className="form" onSubmit={this.handleSubmit}>
             <center>
-              <img src={require("../Images/user1.jpg")}></img>
+              <img src={require("../../assets/Images/user1.jpg")}></img>
             </center>
             <br></br>
             <br></br>
@@ -55,7 +59,14 @@ class SelectUser extends Component {
               </option>
             </select>
             <br></br>
-            <input type="submit" className="button" value="Next" onClick={()=>this.props.getUserRole(this.state.whichUser)}></input>
+            <br></br>
+            <br></br>
+            <input
+              type="submit"
+              className="button"
+              value="Next"
+              onClick={() => this.props.getUserRole(this.state.whichUser)}
+            ></input>
           </form>
         )}
       </div>

@@ -28,10 +28,10 @@ class Shop extends Component {
     var productsData = JSON.parse(localStorage.getItem("products"));
     //  productsData.map(product=>delete product.quantity);
 
-    console.log("cbbd", productsData);
+    //console.log("cbbd", productsData);
     this.setState({ productsData: productsData }, () => {
       this.getCategory();
-      console.log("hello");
+      //console.log("hello");
     });
   };
 
@@ -86,7 +86,6 @@ class Shop extends Component {
     //getting the adding to cart product
     // console.log(product);
     if (!this.props.isLoggedIn) {
-      console.log("not logged in");
       this.setState({ isAllowedToAddCart: true });
       return;
     }
@@ -99,6 +98,9 @@ class Shop extends Component {
 
     //finding userId of loggedIn user
     var userSession = JSON.parse(localStorage.getItem("userSession"));
+    if(userSession){
+
+    
     const username = userSession.username;
     const password = userSession.password;
     var users = JSON.parse(localStorage.getItem("Users"));
@@ -118,7 +120,7 @@ class Shop extends Component {
       order.userId = currentUserId;
       order.products.push(product);
       temp.push(order);
-      console.log("hdh", temp);
+      // console.log("hdh", temp);
       localStorage.setItem("orders", JSON.stringify(temp));
     } else {
       for (let i = 0; i < orders.length; i++) {
@@ -128,7 +130,7 @@ class Shop extends Component {
               (Product) => Product.productId === product.productId
             )
           ) {
-            console.log("Found");
+            // console.log("Found");
             orders[i].products.push(product);
             console.log(orders[i]);
 
@@ -138,10 +140,11 @@ class Shop extends Component {
             localStorage.setItem("orders", JSON.stringify(temp));
             var totalProducts = orders[i].products.length;
 
-            this.props.calculateCartCount(totalProducts);
-            console.log(totalProducts);
+            
+            // console.log(totalProducts);
             console.log("products:", orders[i].products);
             this.setState({ addedToCart: true });
+            this.props.calculateCartCount(totalProducts);
             alert("Added to cart");
 
             return;
@@ -161,6 +164,9 @@ class Shop extends Component {
       temp.push(order);
       console.log("temp:", temp);
       localStorage.setItem("orders", JSON.stringify(temp));
+      console.log(totalProducts);
+      this.props.calculateCartCount(1);
+      
 
       // console.log("products:", orders[0].products);
       // var totalProducts = orders[orders.length-1].products.length;
@@ -169,6 +175,10 @@ class Shop extends Component {
       // console.log(totalProducts);
       alert("Added to cart");
     }
+  }
+  else{
+    alert("Please register to continue with shopping..");
+  }
   };
 
   //................................................................................................

@@ -24,13 +24,13 @@ class Register extends Component {
     console.log("data:", users);
 
     var newUser = { ...this.state };
-    var userId=JSON.parse(localStorage.getItem("userId"));
+    var userId = JSON.parse(localStorage.getItem("userId"));
 
-    newUser['userId']=++userId;
-    localStorage.setItem("userId",userId);
+    newUser["userId"] = ++userId;
+    localStorage.setItem("userId", userId);
 
     var temp = [];
-    
+
     if (users === null) {
       temp.push(newUser);
       localStorage.setItem("Users", JSON.stringify(temp));
@@ -67,6 +67,7 @@ class Register extends Component {
             name="username"
             placeholder="Enter username"
             onChange={this.handleChange}
+            required
           ></input>
           <br></br>
           <label>
@@ -78,6 +79,7 @@ class Register extends Component {
             name="email"
             placeholder="Enter email"
             onChange={this.handleChange}
+            required
           ></input>
           <br></br>
           <label>
@@ -89,6 +91,7 @@ class Register extends Component {
             name="password"
             placeholder="Enter password"
             onChange={this.handleChange}
+            required
           ></input>
           <br></br>
           <br></br>

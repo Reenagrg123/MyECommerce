@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import EachProduct from "./eachproduct";
 import ProductDetail from "./productdetail";
-import Pagination from "../reusable/pagination";
+import Pagination from "../../components/reusable/pagination";
 import { Redirect } from "react-router-dom";
 
 class ViewProducts extends Component {
   constructor(props) {
+    //console.log("constructor called");
     super(props);
     this.productsPerPage = 5;
     this.currentProducts = null;
@@ -29,7 +30,7 @@ class ViewProducts extends Component {
     return productsData;
   };
 
-  getCurrentPage = (pageNumber) => {
+  handlePageClick = (pageNumber) => {
     this.setState({ currentPage: pageNumber });
   };
 
@@ -95,6 +96,8 @@ class ViewProducts extends Component {
                   product={product}
                   onDelete={this.handleDelete}
                   onView={this.handleView}
+                  onPageClick={this.handlePageClick}
+                  currentPage={this.currentPage}
                 >
                   <td>P{product.productId}</td>
                 </EachProduct>
@@ -104,7 +107,7 @@ class ViewProducts extends Component {
           <Pagination
             productsPerPage={this.productsPerPage}
             totalProducts={productsData.length}
-            getCurrentPage={this.getCurrentPage}
+            onPageClick={this.handlePageClick}
           ></Pagination>
         </div>
       );

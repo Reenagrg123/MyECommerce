@@ -10,6 +10,7 @@ const LogOut = (props) => {
   } else {
     localStorage.removeItem("userSession");
   }
+  props.calculateCartCount(0);
   alert("Logout successfully");
 
   return <Redirect to="/login" />;

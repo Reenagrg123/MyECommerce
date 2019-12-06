@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Product from "./product";
-import "./style.css";
+import "./style.scss";
 import { Redirect } from "react-router-dom";
 import ThanksShopping from "./thanksForShopping";
-import { getCurrentUserOrder } from "../getCurrentUserOrder";
+import { getCurrentUserOrder } from "../helpers/getCurrentUserOrder";
 
 class Cart extends Component {
   constructor(props) {
@@ -14,7 +14,8 @@ class Cart extends Component {
       order: null,
       total: 0,
       modalShow: false,
-      totalPayable: 0
+      totalPayable: 0,
+      noItem: false
     };
   }
 
@@ -24,9 +25,10 @@ class Cart extends Component {
     var currentUserData = orders[orderIndex];
     // console.log("current user data:", currentUserData);
     if (currentUserData) {
-      this.setState({ order: currentUserData.products });
+      this.setState({ order: currentUserData.products }, () => {
+        // this.props.calculateCartCount(this.state.order.length);
+      });
     }
-    // this.props.calculateCartCount(currentUserData.products.length);
   }
 
   //................................................................
@@ -51,71 +53,82 @@ class Cart extends Component {
 
   handleModalShow = (flag) => {
     console.log("flag:", flag);
-    this.setState({ modalShow: flag });
-
     var orders = JSON.parse(localStorage.getItem("orders"));
-
     var orderIndex = getCurrentUserOrder();
-    console.log("Orders:",orders);
-    orders.splice(orderIndex,1);
-    console.log("updated orders:",orders);
+    console.log("Orders:", orders);
+    if (flag) {
+      if (orders[orderIndex].products.length === 0) {
+        this.setState({ noItem: true });
+      }
+      this.setState({ modalShow: flag });
+    }
+     else {
+      this.setState({ modalShow: flag });
+      this.setState({ order: null });
 
-     console.log("Placed order:",this.state.order);
+      orders.splice(orderIndex, 1);
+      console.log("updated orders:", orders);
 
-     const {order}=this.state;
-     var products=JSON.parse(localStorage.getItem("products"));
+      console.log("Placed order:", this.state.order);
 
-     for(let i=0;i<order.length;i++){
-       for(let j=0;j<products.length;j++){
-         if(order[i].productId===products[j].productId){
+      //removing placedorder from localstorage
+      console.log("orders:", orders);
+      var temp = [];
+      orders.map((order) => temp.push(order));
+      localStorage.setItem("orders",JSON.stringify(temp));
+      this.props.calculateCartCount(0);
+    }
 
+    // const { order } = this.state;
+    // var products = JSON.parse(localStorage.getItem("products"));
 
-         }
-       }
-     }
+    //  for(let i=0;i<order.length;i++){
+    //    for(let j=0;j<products.length;j++){
+    //      if(order[i].productId===products[j].productId){
 
-    // this.setState({order:null});
+    //      }
+    //    }
+    //  }
 
-
-    //removing placedorder from localstorage
-    var temp=[];
-    orders.map(order=>temp.push(order));
-    // localStorage.setItem("orders",JSON.stringify(temp));
-  
+    //this.setState({ order: null });
   };
 
   // updateOrderQuantity=(countQuantity)=>{
-    
+
   // }
 
   // handlePlaceOrder=()=>{
-    
+
   // }
 
   handleTotalPayable = (prevTotal, total) => {
     var { tempPayable } = this;
-    console.log("Total:", total);
+    //console.log("Total:", total);
 
     var newTotal = parseInt(total) + (tempPayable - prevTotal);
-    console.log("new total:", newTotal);
+   // console.log("new total:", newTotal);
     this.tempPayable = newTotal;
-    console.log("Temp payable:", this.tempPayable);
+    //console.log("Temp payable:", this.tempPayable);
 
     this.setState({ totalPayable: this.tempPayable });
   };
 
   //....................................................................
   render() {
-    const { order, totalPayable, modalShow } = this.state;
+    const { order, totalPayable, modalShow, noItem } = this.state;
 
     if (order != null) {
       var orderIndex = getCurrentUserOrder();
+      console.log(this.props.userRole);
+      console.log("Modal show:", modalShow);
       return (
         <div>
           {modalShow && (
             <ThanksShopping
               onPlaceOrder={this.handleModalShow}
               show={modalShow}
+              noItem={noItem}
+              order={order}
             />
           )}
           <table className="viewProducts">

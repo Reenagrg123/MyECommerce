@@ -14,9 +14,14 @@ const ThanksShopping = (props) => {
         <Modal.Title id="contained-modal-title-vcenter"></Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>
-          Thanks for Shopping!!. Your order will be delievered in next 2-3 days.
-        </h4>
+        {props.noItem ? (
+          <h4>Please add some items in the cart.</h4>
+        ) : (
+          <h4>
+            Thanks for Shopping!!. Your order will be delievered in next 2-3
+            days.
+          </h4>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={() => props.onPlaceOrder(false)}>Close</Button>

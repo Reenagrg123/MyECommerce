@@ -5,17 +5,23 @@
   margin-top: 50px;
   margin-right: 40px;
   float: right;
+  /* position:fixed; */
 }
-.pagination button{
+.pagination button {
   padding: 3px;
   cursor: pointer;
   padding: 8px 15px;
   margin-right: 0.3em;
-  position: relative;
-  outline:1px;
+  /* position: relative; */
+  outline: 1px;
 }
 
+// button.active,
+// button:hover {
+//   background-color: #008cba;
+// }
 
-  button.active,button:hover {
-  background-color: #008cba;
+button.active,
+button:focus {
+  background: #008cba;
 }

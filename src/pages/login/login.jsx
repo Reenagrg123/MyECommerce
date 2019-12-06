@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import App from "../../App";
 import AdminDashboard from "../admin";
-import "../inputs.css";
+import "../../components/reusable/common.scss";
 import "react-router-dom";
+import { getCurrentUserOrder } from "../helpers/getCurrentUserOrder";
 
 class Login extends Component {
   constructor(props) {
@@ -63,7 +64,8 @@ class Login extends Component {
     var credentials = "";
     if (this.state.userRole === "admin") {
       credentials = JSON.parse(localStorage.getItem("Admin"));
-    }console.log(credentials);
+    }
+    console.log(credentials);
     this.username = credentials.username;
     this.password = credentials.password;
   };
@@ -73,11 +75,11 @@ class Login extends Component {
     this.users = JSON.parse(localStorage.getItem("Users"));
     //console.log(this.users.find(this.iterateUsers));
     // var currentUser = this.users.find(this.iterateUsers);
-    if(this.users){
-    if (this.users.find(this.iterateUsers)) {
-      return true;
+    if (this.users) {
+      if (this.users.find(this.iterateUsers)) {
+        return true;
+      }
     }
-  }
   };
 
   //...........................................
@@ -97,7 +99,7 @@ class Login extends Component {
   isAuthenticated = () => {
     const { username, password } = this.state;
     if (username == this.username && password == this.password) {
-     // console.log("equal");
+      // console.log("equal");
       return true;
     }
   };
@@ -114,8 +116,6 @@ class Login extends Component {
     }
   };
 
-  
-
   setSession = () => {
     const currentUser = {};
 
@@ -127,8 +127,21 @@ class Login extends Component {
       localStorage.setItem("adminSession", JSON.stringify(currentUser));
     else {
       localStorage.setItem("userSession", JSON.stringify(currentUser));
+      setTimeout(() => this.updateCount(), 50);
     }
   };
+
+  updateCount = () => {
+    var orders = JSON.parse(localStorage.getItem("orders"));
+    var orderIndex = getCurrentUserOrder();
+    var currentUserData = orders[orderIndex];
+    // console.log("current user data:", currentUserData);
+    if (currentUserData) {
+      this.setState({ order: currentUserData.products });
+      this.props.calculateCartCount(currentUserData.products.length);
+    }
+  };
+
   //..............................................
   render() {
     const {
@@ -139,17 +152,17 @@ class Login extends Component {
       userRole,
       isClickedRegister
     } = this.state;
-    console.log("In login",this.props.isLoggedIn);
-    
+    console.log("In login", this.props.isLoggedIn);
+
     return (
       <React.Fragment>
         {isClickedRegister && <Redirect to="/register" />}
         {this.props.isLoggedIn ? (
           <div>
-            {userRole == "admin" ? (
+            {userRole === "admin" ? (
               <Redirect to="/admin" />
             ) : (
-              <Redirect to="/"/>
+              <Redirect to="/" />
             )}
           </div>
         ) : (

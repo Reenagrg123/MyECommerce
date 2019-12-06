@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../inputs.css";
+import "../../components/reusable/common.scss";
 import nextId from "react-id-generator";
 import { withRouter, Redirect } from "react-router-dom";
 // import ViewProduct from "./viewproducts";
@@ -52,7 +52,7 @@ class AddProducts extends Component {
     } else {
       productsData.map((product) => tempData.push(product));
       tempData.push(myProduct);
-      localStorage.setItem("products", JSON.stringify(tempData));
+      //localStorage.setItem("products", JSON.stringify(tempData));
     }
 
     alert("Product added successfully");
@@ -96,6 +96,7 @@ class AddProducts extends Component {
                 className="textbox"
                 name="category"
                 onChange={this.handleChange}
+                required
               >
                 <option>--Select category--</option>
                 <option value="Men" defaultValue="Men">
@@ -115,6 +116,7 @@ class AddProducts extends Component {
                 name="productName"
                 placeholder="Enter product name"
                 onChange={this.handleChange}
+                required
               ></input>
               <br></br>
               <label>
@@ -126,6 +128,8 @@ class AddProducts extends Component {
                 name="quantity"
                 placeholder="Enter quantity"
                 onChange={this.handleChange}
+                min="1"
+                required
               ></input>
               <br></br>
               <label>
@@ -137,6 +141,7 @@ class AddProducts extends Component {
                 name="price"
                 placeholder="Enter price"
                 onChange={this.handleChange}
+                required
               ></input>
               <br></br>
 

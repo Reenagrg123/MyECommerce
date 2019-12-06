@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CountHandler from "../reusable/countHandler";
+import CountHandler from "../../components/reusable/countHandler";
 
 class Product extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Product extends Component {
     const { total, countQuantity } = this.state;
     if (countQuantity != prevState.countQuantity) {
       this.handleTotal();
-     
+
       // this.props.updateOrderQuantity(countQuantity);
     }
     if (this.state.total != prevState.total) {
@@ -81,7 +81,7 @@ class Product extends Component {
       <tr>
         <td>
           <img
-            src={require(`../Images/ProductItems/${category}/${selectedFile}`)}
+            src={require(`../../assets/Images/ProductItems/${category}/${selectedFile}`)}
           ></img>
         </td>
         <td>{category}</td>

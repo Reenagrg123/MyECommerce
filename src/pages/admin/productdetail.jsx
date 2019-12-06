@@ -11,21 +11,21 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    const paramId = this.props.match.params.id;
-    console.log(paramId);
-    if (paramId) {
-      this.fetchData(paramId);
-    } else {
-      console.log(this.props.location);
+    const productName = this.props.match.params.productName;
+    if (productName) {
+      this.fetchData(productName);
+      // } else {
+      //   console.log(this.props.location);
+      // }
     }
   }
   //...................................................................................
-  fetchData = (paramId) => {
+  fetchData = (productName) => {
     var products = JSON.parse(localStorage.getItem("products"));
     var requiredProduct = products.filter(
-      (product) => product.productId == paramId
+      (product) => product.productName == productName
     );
-    console.log(requiredProduct);
+    //console.log(requiredProduct);
     this.setState({ requiredProduct: requiredProduct[0] });
   };
 
@@ -38,7 +38,6 @@ class ProductDetail extends Component {
     const { requiredProduct } = this.state;
 
     if (requiredProduct != null) {
-      console.log("in");
       const {
         category,
         productName,
@@ -47,13 +46,13 @@ class ProductDetail extends Component {
         selectedFile
       } = requiredProduct;
       const { isClickedBack } = this.state;
-      console.log(category);
+      // console.log(category);
       return (
-        <div class="jumbotron">
+        <div className="jumbotron">
           {isClickedBack && <Redirect to="/viewproducts" />}
           <img
-            class="productImage"
-            src={require(`../Images/ProductItems/${category}/${selectedFile}`)}
+            className="productImage"
+            src={require(`../../assets/Images/ProductItems/${category}/${selectedFile}`)}
           ></img>
           <h2>
             <b>Category: </b>
@@ -75,7 +74,7 @@ class ProductDetail extends Component {
           <br></br>
           <input
             type="button"
-            class="button"
+            className="button"
             value="Back to All Products"
             onClick={this.handleBack}
           ></input>

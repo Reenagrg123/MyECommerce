@@ -6,24 +6,19 @@ class Card extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClickedCart: false,
+      isClickedCart: false
     };
   }
 
   //.........................................................................................
   render() {
-    const {
-      category,
-      productName,
-      price,
-      selectedFile
-    } = this.props.product;
-    const {onCartClick,product,addedToCart}=this.props;
+    const { category, productName, price, selectedFile } = this.props.product;
+    const { onCartClick, product, addedToCart } = this.props;
 
     return (
       <div className="card">
         <img
-          src={require(`../Images/ProductItems/${category}/${selectedFile}`)}
+          src={require(`../../assets/Images/ProductItems/${category}/${selectedFile}`)}
         ></img>
         <h5>{productName}</h5>
         <h5>{price}Rs.</h5>
@@ -31,7 +26,7 @@ class Card extends Component {
           type="button"
           className="button"
           value="Add to Cart"
-          onClick={()=>onCartClick(product)}
+          onClick={() => onCartClick(product)}
         ></input>
       </div>
     );

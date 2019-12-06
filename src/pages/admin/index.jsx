@@ -1,14 +1,12 @@
 import React, { Component, Fragment } from "react";
-import "./style.css";
+import "./style.scss";
 import AddProducts from "./addproducts";
-import "../inputs.css";
 import ViewProducts from "./viewproducts";
-import {Redirect} from 'react-router-dom';
-
+import { Redirect } from "react-router-dom";
+import "../../components/reusable/common.scss";
 
 class AdminDashboard extends Component {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     this.state = {
       isClickedAddProducts: false,
@@ -29,8 +27,10 @@ class AdminDashboard extends Component {
   render() {
     return (
       <div>
-        {this.state.isClickedAddProducts && this.props.history.push("/addProducts")}
-        {this.state.isClickedViewProducts && this.props.history.push("/viewProducts")}
+        {this.state.isClickedAddProducts &&
+          this.props.history.push("/addProducts")}
+        {this.state.isClickedViewProducts &&
+          this.props.history.push("/viewProducts")}
 
         <Fragment>
           <h2>
@@ -44,7 +44,7 @@ class AdminDashboard extends Component {
             <div className="flex-container">
               <img
                 className="adminImage"
-                src={require("../Images/admin.png")}
+                src={require("../../assets/Images/admin.png")}
               ></img>
               <input
                 type="button"

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import "./inputs.css";
-import Logout from "./login/logout";
+import "./common.scss";
+import Logout from "../../pages/login/logout";
 
 class NavBar extends Component {
   render() {
     // console.log("nav:", this.props.isLoggedIn);
+    const { isLoggedIn, userRole } = this.props;
 
     return (
       <ul className="navigation">
@@ -20,7 +21,7 @@ class NavBar extends Component {
           </NavLink>
         </li>
         <li>
-          {!this.props.isLoggedIn ? (
+          {!isLoggedIn ? (
             <NavLink to="/login" activeClassName=" activeClass">
               Login
             </NavLink>
@@ -32,9 +33,19 @@ class NavBar extends Component {
         </li>
         <li>
           <NavLink to="/cart" activeClassName=" activeClass">
-            <i className="fa badge" value={this.props.cartCount}>&#xf07a;</i>  Cart
+            <i className="fa badge" value={this.props.cartCount}>
+              &#xf07a;
+            </i>{" "}
+            Cart
           </NavLink>
         </li>
+        {userRole == "admin" && isLoggedIn && (
+          <li>
+            <NavLink to="/admin" activeClassName=" activeClass">
+              Admin
+            </NavLink>
+          </li>
+        )}
       </ul>
     );
   }

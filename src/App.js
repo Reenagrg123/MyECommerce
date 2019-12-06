@@ -1,47 +1,65 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-
-import NavBar from "./components/navbar";
-import Login from "./components/login/login";
-import AdminDashboard from "./components/admin";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import AddProducts from "./components/admin/addproducts";
-import ViewProducts from "./components/admin/viewproducts";
-import EachProduct from "./components/admin/eachproduct";
-import Shop from "./components/shop";
-import SelectUser from "./components/login";
-import Register from "./components/login/register";
-import Cart from "./components/cart";
-import Home from "./components/home";
-import NotFound from "./components/notfound";
-import LogOut from "./components/login/logout";
-import ProductDetail from "./components/admin/productdetail";
-import ThanksShopping from "./components/cart/thanksForShopping";
-import { getCurrentUserOrder } from "./components/getCurrentUserOrder";
+import {AdminPrivateRoute,UserPrivateRoute} from "./components/reusable/privateRoutes";
 
-import {
-  AdminPrivateRoute,
-  UserPrivateRoute
-} from "./components/helpers/privateRoutes";
+
+import NavBar from "./components/reusable/navbar";
+import Home from "./pages/home";
+
+import SelectUser from "./pages/login";
+import Login from "./pages/login";
+import Register from "./pages/login/register";
+import LogOut from "./pages/login/logout";
+
+
+import AdminDashboard from "./pages/admin";
+import AddProducts from "./pages/admin/addproducts";
+import ViewProducts from "./pages/admin/viewproducts";
+import EachProduct from "./pages/admin/eachproduct";
+import ProductDetail from "./pages/admin/productdetail";
+
+
+import Shop from "./pages/shop";
+import Cart from "./pages/cart";
+import NotFound from "./components/reusable/notfound";
+import { getCurrentUserOrder } from "./pages/helpers/getCurrentUserOrder";
+import ThanksShopping from "./pages/cart/thanksForShopping";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isLoggedIn: false,
+      isLoggedIn: false,
       userRole: "",
-      cartCount: 0
+      cartCount: 0,
+      isLoggedIn: false
     };
   }
   componentDidMount() {
-    var orders = JSON.parse(localStorage.getItem("orders"));
-    var orderIndex = getCurrentUserOrder();
-    var currentUserData = orders[orderIndex];
-    // console.log("current user data:", currentUserData);
-
-    if (currentUserData) {
-      this.setState({ cartCount: currentUserData.products.length });
+    //setting login  whenever app renders
+    if (localStorage.getItem("userSession") && this.state.userRole === "user") {
+      this.setState({ isLoggedIn: true });
+      var orders = JSON.parse(localStorage.getItem("orders"));
+      var orderIndex = getCurrentUserOrder();
+      var currentUserData = orders[orderIndex];
+      if (currentUserData) {
+        this.handleCartCount(currentUserData.products.length);
+      }
+    } else {
+      this.setState({ isLoggedIn: false });
     }
+
+    // var orders = JSON.parse(localStorage.getItem("orders"));
+    // var orderIndex = getCurrentUserOrder();
+    // var currentUserData = orders[orderIndex];
+    // // console.log("current user data:", currentUserData);
+    // if (currentUserData) {
+    //   this.setState({ cartCount: currentUserData.products.length }, () => {
+    //     console.log(this.state.cartCount);
+    //   });
+    // }
+    //this.updateLoginStatus();
   }
 
   updateLoginStatus = () => {
@@ -69,16 +87,21 @@ class App extends Component {
   handleCartCount = (count) => {
     console.log("cartCount:", count);
     this.setState({ cartCount: count });
-    console.log("cartCount:", count);
+    // console.log("cartCount:", count);
   };
 
   //................................................................................
   render() {
     // console.log("In App:", this.state.isLoggedIn);
     const { isLoggedIn, userRole, cartCount } = this.state;
+    console.log(isLoggedIn);
     return (
       <Router>
-        <NavBar isLoggedIn={isLoggedIn} cartCount={cartCount}></NavBar>
+        <NavBar
+          isLoggedIn={isLoggedIn}
+          cartCount={cartCount}
+          userRole={userRole}
+        ></NavBar>
         <Switch>
           <Route path="/" exact component={Home} />
 
@@ -90,12 +113,15 @@ class App extends Component {
           <AdminPrivateRoute path="/viewProducts" component={ViewProducts} />
 
           <AdminPrivateRoute
-            path="/product/:id"
+            path="/product/:productName"
             component={ProductDetail}
           ></AdminPrivateRoute>
 
           <Route path="/shop">
-            <Shop calculateCartCount={this.handleCartCount} isLoggedIn={isLoggedIn}></Shop>
+            <Shop
+              calculateCartCount={this.handleCartCount}
+              isLoggedIn={isLoggedIn}
+            ></Shop>
           </Route>
 
           <Route path="/login">
@@ -103,22 +129,29 @@ class App extends Component {
               getUserRole={this.getUserRole}
               loginStatus={this.updateLoginStatus}
               isLoggedIn={isLoggedIn}
+              calculateCartCount={this.handleCartCount}
             />
           </Route>
 
-          {this.state.isLoggedIn && (
-            <Route path="/logout">
-              <LogOut
-                loginStatus={this.updateLoginStatus}
-                userRole={userRole}
-              />
-            </Route>
-          )}
+          <Route path="/logout">
+            <LogOut
+              loginStatus={this.updateLoginStatus}
+              userRole={userRole}
+              calculateCartCount={this.handleCartCount}
+            />
+          </Route>
 
           <Route path="/register" component={Register} />
+
           <UserPrivateRoute
             path="/cart"
-            component={() => <Cart calculateCartCount={this.handleCartCount} />}
+            component={() => (
+              <Cart
+                calculateCartCount={this.handleCartCount}
+                userRole={userRole}
+                isLoggedIn={isLoggedIn}
+              />
+            )}
           />
           <Route path="/thanks" component={ThanksShopping}></Route>
 

@@ -7,7 +7,7 @@ class EachProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isClickedView: false
+      isClickedView: false,
     };
   }
 
@@ -19,7 +19,8 @@ class EachProduct extends Component {
 
   //..................................................................................................
   render() {
-    const { product, onDelete, onView } = this.props;
+    const { product, onDelete, onView,currentPage } = this.props;
+    console.log("current page",this.props.currentPage);
     const {
       category,
       productName,
@@ -31,7 +32,7 @@ class EachProduct extends Component {
 
     return (
       <tr>
-        {isClickedView && <Redirect to={`/product/${productId}`} />}
+        {isClickedView && <Redirect to={`/product/${productName}`} />}
 
         {this.props.children}
         <td>{category}</td>
