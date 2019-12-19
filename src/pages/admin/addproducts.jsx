@@ -54,6 +54,7 @@ class AddProducts extends Component {
     } else {
       productsData.map((product) => tempData.push(product));
       tempData.push(myProduct);
+      localStorage.setItem("products", JSON.stringify(tempData));
     }
 
     alert("Product added successfully");
@@ -82,13 +83,6 @@ class AddProducts extends Component {
                   <u>Add Product</u>
                 </b>
               </center>
-
-              <input
-                type="button"
-                className="button"
-                value="<--Back to DashBoard"
-                onClick={this.handleBack}
-              ></input>
             </h2>
             <form className="form" onSubmit={this.handleSubmit}>
               <label>

@@ -61,15 +61,9 @@ class App extends Component {
     }
   };
 
-  //getting the userRole "admin" or "user" so that we can apply conditiond based on userRole
-  getUserRole = (userRole) => {
-    // console.log("userRole:", userRole);
-    this.setState({ userRole: userRole });
-  };
-
   //updating the cart count initially whenever app renders
   handleCartCount = (count) => {
-    console.log("cartCount:", count);
+    // console.log("cartCount:", count);
     this.setState({ cartCount: count });
     // console.log("cartCount:", count);
   };
@@ -83,7 +77,6 @@ class App extends Component {
         <NavBar
           isLoggedIn={isLoggedIn}
           cartCount={cartCount}
-          userRole={userRole}
         ></NavBar>
 
         <Switch>
@@ -98,7 +91,6 @@ class App extends Component {
 
           <Route path="/login">
             <SelectUser
-              getUserRole={this.getUserRole}
               loginStatus={this.updateLoginStatus}
               isLoggedIn={isLoggedIn}
               calculateCartCount={this.handleCartCount}
@@ -107,7 +99,6 @@ class App extends Component {
           <Route path="/logout">
             <LogOut
               loginStatus={this.updateLoginStatus}
-              userRole={userRole}
               calculateCartCount={this.handleCartCount}
             />
           </Route>
@@ -119,11 +110,10 @@ class App extends Component {
           <AdminPrivateRoute path="/viewProducts" component={ViewProducts} />
 
           <AdminPrivateRoute
-            path="/product/:productName"
+            path="/product/:productId"
             component={ProductDetail}
           ></AdminPrivateRoute>
 
-          
           <UserPrivateRoute
             path="/cart"
             component={() => (

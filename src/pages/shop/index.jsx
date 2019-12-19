@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Card from "./card";
+import { withRouter } from "react-router-dom";
+import "./style.scss";
 
 import { Redirect } from "react-router";
 
@@ -165,7 +167,7 @@ class Shop extends Component {
     }
     //If the loggedIn user is admin
     else {
-      alert("Please register to continue with shopping..");
+      alert("Please register/login to continue with shopping..");
     }
   };
 
@@ -179,6 +181,8 @@ class Shop extends Component {
       isAllowedToAddCart,
       addedToCart
     } = this.state;
+    // console.log("location:", this.props.location);
+
     if (
       electronicsData != null &&
       footwearsData != null &&
@@ -187,8 +191,14 @@ class Shop extends Component {
     ) {
       return (
         <React.Fragment>
-          {isAllowedToAddCart && <Redirect to="/login" />}
-          <hr></hr>
+          {isAllowedToAddCart && (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { userRole: "user" }
+              }}
+            />
+          )}
           <center>
             <input
               type="text"
@@ -205,14 +215,14 @@ class Shop extends Component {
             </button>
           </center>
           <br></br>
-          <br></br>
-          <h1 className="categoryHeading" id="electronics">
-            <center>----Electronics----</center>
+          <hr></hr>
+          <h1 className="categoryHeading" id="footwears">
+            <center>----Footwears----</center>
           </h1>
           <br></br>
           <br></br>
           <div className="row">
-            {electronicsData.map((product) => (
+            {footwearsData.map((product) => (
               <Card
                 product={product}
                 key={product.productId}
@@ -222,13 +232,14 @@ class Shop extends Component {
             ))}
           </div>
           <hr></hr>
-          <h1 className="categoryHeading" id="footwears">
-            <center>----Footwears----</center>
+          <br></br>
+          <h1 className="categoryHeading" id="electronics">
+            <center>----Electronics----</center>
           </h1>
           <br></br>
           <br></br>
           <div className="row">
-            {footwearsData.map((product) => (
+            {electronicsData.map((product) => (
               <Card
                 product={product}
                 key={product.productId}
@@ -277,4 +288,4 @@ class Shop extends Component {
   }
 }
 
-export default Shop;
+export default withRouter(Shop);

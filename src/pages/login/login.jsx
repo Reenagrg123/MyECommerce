@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import App from "../../App";
 import AdminDashboard from "../admin";
 import "../../components/reusable/common.scss";
 import "react-router-dom";
 import { getCurrentUserOrder } from "../helpers/getCurrentUserOrder";
+import {withRouter} from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Login extends Component {
       username: "",
       password: "",
       errorMsg: "",
-      userRole: "",
+      userRole:"",
       isClickedRegister: false,
       isClickedLogin: false
     };
@@ -128,6 +128,12 @@ class Login extends Component {
       this.props.calculateCartCount(currentUserData.products.length);
     }
   };
+  updateUrl() {
+    const searchParams = new URLSearchParams();
+    const url = searchParams.set("query");
+    console.log(url);
+    this.props.history.push(`?${url}`);
+  }
 
   //........................................................................................
   render() {
@@ -200,12 +206,7 @@ class Login extends Component {
                     <p>Already registered?</p>
                   </center>
                 )}
-                <button
-                  type="submit"
-                  id="loginBtn"
-                  className="button"
-                  onClick={this.handleLogin}
-                >
+                <button type="submit" id="loginBtn" className="button">
                   Login
                 </button>
               </div>
@@ -215,7 +216,7 @@ class Login extends Component {
                     <p>Don't have an account?</p>
                   </center>
                   <button
-                    id="registerBtn"
+                    id="loginBtn"
                     className="button"
                     onClick={this.handleRegister}
                   >
@@ -223,6 +224,9 @@ class Login extends Component {
                   </button>
                 </div>
               )}
+              <br></br>
+            <center><a href="">Back to select user</a></center>
+
             </form>
             )}
           </div>
@@ -232,4 +236,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

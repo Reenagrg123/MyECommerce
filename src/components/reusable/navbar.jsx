@@ -5,8 +5,7 @@ import Logout from "../../pages/login/logout";
 
 class NavBar extends Component {
   render() {
-    // console.log("nav:", this.props.isLoggedIn);
-    const { isLoggedIn, userRole } = this.props;
+    const { isLoggedIn } = this.props;
 
     return (
       <ul className="navigation">
@@ -31,19 +30,28 @@ class NavBar extends Component {
             </NavLink>
           )}
         </li>
-        <li>
-          <NavLink to="/cart" activeClassName=" activeClass">
-            <i className="fa badge" value={this.props.cartCount}>
-              &#xf07a;
-            </i>{" "}
-            Cart
-          </NavLink>
-        </li>
-        {userRole === "admin" && isLoggedIn && (
+
+        {JSON.parse(localStorage.getItem("currentUserRole")) === "user" && (
+          <li>
+            <NavLink to="/cart" activeClassName=" activeClass">
+              <i className="fa badge" value={this.props.cartCount}>
+                &#xf07a;
+              </i>{" "}
+              Cart
+            </NavLink>
+          </li>
+        )}
+        {JSON.parse(localStorage.getItem("currentUserRole")) === "admin" && (
           <li>
             <NavLink to="/admin" activeClassName=" activeClass">
               Admin
             </NavLink>
+          </li>
+        )}
+        {localStorage.getItem("session") && (
+          <li class="welcomeMsg">
+            Welcome, {JSON.parse(localStorage.getItem("session")).username}{" "}
+            <i class="fa fa-user" aria-hidden="true"></i>
           </li>
         )}
       </ul>

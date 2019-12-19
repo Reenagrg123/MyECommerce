@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "./style.css";
-import { Redirect } from "react-router-dom";
 
 class Card extends Component {
   constructor(props) {
@@ -16,19 +14,22 @@ class Card extends Component {
     const { onCartClick, product } = this.props;
 
     return (
-      <div className="card">
-        <img
-          src={require(`../../assets/Images/ProductItems/${category}/${selectedFile}`)}
-        ></img>
-        <h5>{productName}</h5>
-        <h5>{price}Rs.</h5>
-        <input
-          type="button"
-          className="button"
-          value="Add to Cart"
-          onClick={() => onCartClick(product)}
-        ></input>
-      </div>
+        <div className="card">
+          <img
+            className="productImg"
+            src={require(`../../assets/Images/ProductItems/${category}/${selectedFile}`)}
+          ></img>
+          <div className="card_content">
+            <h5>{productName}</h5>
+            <h5>{price}/-</h5>
+            <input
+              type="button"
+              className="button"
+              value="Add to Cart"
+              onClick={() => onCartClick(product)}
+            ></input>
+          </div>
+        </div>
     );
   }
 }

@@ -14,18 +14,17 @@ class ViewProducts extends Component {
       productsData: null,
       product: null,
       currentPage: 1,
-      currentProducts: null
+      currentProducts: null,
+      pageActiveColor: ""
     };
   }
 
   componentDidMount() {
     var productsData = this.getProductsData();
-    console.log("Data:", this.state.productsData);
+    // console.log("Data:", this.state.productsData);
     this.setState({ productsData: productsData });
-    console.log(this.props.location.search);
   }
   //...............................................................................................
-
 
   //getting all products data
   getProductsData = () => {
@@ -36,8 +35,8 @@ class ViewProducts extends Component {
   //setting the page no on clicking a particular page
   handlePageClick = (pageNumber) => {
     this.setState({ currentPage: pageNumber });
+    this.setState({ pageActiveColor: 'blue' });
   };
-
 
   //getting the current page products
   getCurrentProducts = () => {
@@ -48,7 +47,7 @@ class ViewProducts extends Component {
       indexOfFirstProduct,
       indexOfLastProduct
     );
-   // console.log("currentProducts:", currentProducts);
+    // console.log("currentProducts:", currentProducts);
     this.currentProducts = currentProducts;
   };
   //..............................................................................................
@@ -65,8 +64,13 @@ class ViewProducts extends Component {
 
   //....................................................................................................
   render() {
-    const { productsData, isClickedView, currentPage, product } = this.state;
-    console.log("current page:", currentPage);
+    const {
+      productsData,
+      isClickedView,
+      currentPage,
+      product,
+      pageActiveColor
+    } = this.state;
     if (productsData != null) {
       this.getCurrentProducts();
 
@@ -112,6 +116,7 @@ class ViewProducts extends Component {
             productsPerPage={this.productsPerPage}
             totalProducts={productsData.length}
             onPageClick={this.handlePageClick}
+            pageActiveColor={pageActiveColor}
           ></Pagination>
         </div>
       );

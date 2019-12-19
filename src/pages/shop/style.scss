@@ -1,0 +1,32 @@
+.card {
+  width: 15%;
+  text-align: center;
+  margin: auto;
+  max-width: 300px;
+  border-width: 2px;
+ box-shadow: whitesmoke;
+}
+.productImg{
+    width:100%;
+    height:60%;
+}
+hr {
+  margin-top: 50px;
+  border-width: 3px;
+}
+.categoryHeading {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 800;
+}
+.search {
+  margin: auto;
+  width: 30%;
+  border: none;
+  background: #ddd;
+  padding: 10px;
+}
+.searchIcon {
+  background: #008cba;
+  padding: 9px;
+}
+

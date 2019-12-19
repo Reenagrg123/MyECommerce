@@ -11,16 +11,16 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    const productName = this.props.match.params.productName;
-    if (productName) {
-      this.fetchData(productName);
+    const productId = this.props.match.params.productId;
+    if (productId) {
+      this.fetchData(productId);
     }
   }
   //...................................................................................
-  fetchData = (productName) => {
+  fetchData = (productId) => {
     var products = JSON.parse(localStorage.getItem("products"));
     var requiredProduct = products.filter(
-      (product) => product.productName == productName
+      (product) => product.productId == productId
     );
     this.setState({ requiredProduct: requiredProduct[0] });
   };

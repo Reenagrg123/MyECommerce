@@ -15,7 +15,8 @@ class Cart extends Component {
       total: 0,
       modalShow: false,
       totalPayable: 0,
-      noItem: false
+      noItem: false,
+      isOrderPlaced: false
     };
   }
 
@@ -58,15 +59,15 @@ class Cart extends Component {
       }
       this.setState({ modalShow: flag });
     } else {
-      this.setState({ modalShow: flag });
-      this.setState({ order: null });
-
+      this.setState({ modalShow: flag, order: null });
       //removing placedorder from localstorage
       orders.splice(orderIndex, 1);
       var temp = [];
       orders.map((order) => temp.push(order));
       localStorage.setItem("orders", JSON.stringify(temp));
-      this.props.calculateCartCount(0);
+      this.setState({ isOrderPlaced: !this.state.isOrderPlaced }, () =>
+        this.props.calculateCartCount(0)
+      );
     }
   };
 
@@ -81,8 +82,20 @@ class Cart extends Component {
 
   //....................................................................
   render() {
-    const { order, totalPayable, modalShow, noItem } = this.state;
-
+    const {
+      order,
+      totalPayable,
+      modalShow,
+      noItem,
+      isOrderPlaced
+    } = this.state;
+    if (isOrderPlaced) {
+      return (
+        <div>
+          <Redirect to="/"></Redirect>
+        </div>
+      );
+    }
     if (order != null) {
       return (
         <div>
@@ -132,7 +145,7 @@ class Cart extends Component {
     } else
       return (
         <div className="jumbotron">
-          <h2>Cart is empty.</h2>
+            <center><img className="emptyCart" src={require("../../assets/Images/empty_cart.png")}></img></center>
         </div>
       );
   }

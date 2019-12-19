@@ -52,7 +52,11 @@ class Register extends Component {
     const { isRegister } = this.state;
     return (
       <div>
-        {isRegister && <Redirect to="/login"></Redirect>}
+        {isRegister && <Redirect
+              to={{
+                pathname: "/login",
+                state: { userRole: "user" }
+              }}/>}
         <form className="form" onSubmit={this.handleSubmit}>
           <br></br>
           <h2>

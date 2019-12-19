@@ -13,30 +13,39 @@ const Home = (props) => {
       <div className="row">
         <div className="column">
           <Link to="/shop#electronics">
-            <img
-              src={require("../../assets/Images/ProductItems/Electronics/laptop.jpg")}
-            ></img>
-            <button className="button">View more</button>
+            <img className="homeImg"
+              src=
+              {require("../../assets/Images/ProductItems/Electronics/laptop.jpg")}
+              >
+            </img>
+            <button className="button viewMore">View more</button>
           </Link>
         </div>
         <div className="column">
           <Link to="/shop#footwears">
             <img
+              className="homeImg"
               src={require("../../assets/Images/ProductItems/Footwear/redgirl.jpg")}
             ></img>
-            <button className="button">View more</button>
+            <button className="button viewMore">View more</button>
           </Link>
         </div>
         <div className="column">
           <Link to="/shop#men">
-            <img src={require("../../assets/Images/ProductItems/Men/woolenmen.jpg")}></img>
-            <button className="button">View more</button>
+            <img
+              className="homeImg"
+              src={require("../../assets/Images/ProductItems/Men/woolenmen.jpg")}
+            ></img>
+            <button className="button viewMore">View more</button>
           </Link>
         </div>
         <div className="column">
           <Link to="/shop#women">
-            <img src={require("../../assets/Images/ProductItems/Women/image2.jpg")}></img>
-            <button className="button">View more</button>
+            <img
+              className="homeImg"
+              src={require("../../assets/Images/ProductItems/Women/image2.jpg")}
+            ></img>
+            <button className="button viewMore">View more</button>
           </Link>
         </div>
       </div>

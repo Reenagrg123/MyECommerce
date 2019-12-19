@@ -31,7 +31,7 @@ class EachProduct extends Component {
 
     return (
       <tr>
-        {isClickedView && <Redirect to={`/product/${productName}`} />}
+        {isClickedView && <Redirect to={`/product/${productId}`} />}
 
         {this.props.children}
         <td>{category}</td>

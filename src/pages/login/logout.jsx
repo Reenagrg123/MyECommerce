@@ -13,7 +13,7 @@ const LogOut = (props) => {
 
   //setting the count to 0 on logout
   props.calculateCartCount(0);
-  alert("Logout successfully");
+  alert("Logged out successfully");
 
   return <Redirect to="/login" />;
 };
