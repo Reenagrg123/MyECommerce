@@ -22,6 +22,7 @@ class Cart extends Component {
 
   componentDidMount() {
     var orders = JSON.parse(localStorage.getItem("orders"));
+    if(orders){
     var orderIndex = getCurrentUserOrder();
     var currentUserData = orders[orderIndex];
     if (currentUserData) {
@@ -29,6 +30,7 @@ class Cart extends Component {
         // this.props.calculateCartCount(this.state.order.length);
       });
     }
+  }
   }
 
   //................................................................

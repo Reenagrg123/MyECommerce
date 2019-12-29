@@ -29,9 +29,11 @@ class Shop extends Component {
   getAllProducts = () => {
     var productsData = JSON.parse(localStorage.getItem("products"));
 
-    this.setState({ productsData: productsData }, () => {
-      this.getCategory();
-    });
+    if (productsData) {
+      this.setState({ productsData: productsData }, () => {
+        this.getCategory();
+      });
+    }
   };
 
   //Filtering the data based on Category

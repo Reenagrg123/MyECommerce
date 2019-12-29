@@ -35,12 +35,23 @@ class App extends Component {
       cartCount: 0,
       isLoggedIn: false
     };
+    this.initializeLocalStorage();
   }
+
+  initializeLocalStorage = () => {
+    localStorage.setItem("userId", 1);
+    localStorage.setItem("orderId", 1);
+    localStorage.setItem("productId", 1);
+    var adminCredentials = { username: "Reena", password: "Reena" };
+    localStorage.setItem("Admin", JSON.stringify(adminCredentials));
+  };
+  
   componentDidMount() {
     //setting login  whenever app renders
     if (localStorage.getItem("session")) {
       this.setState({ isLoggedIn: true });
       var orders = JSON.parse(localStorage.getItem("orders"));
+      if(orders){
       var orderIndex = getCurrentUserOrder();
       var currentUserData = orders[orderIndex];
       if (currentUserData) {
@@ -49,6 +60,7 @@ class App extends Component {
     } else {
       this.setState({ isLoggedIn: false });
     }
+  }
   }
 
   //................................................................................................
@@ -74,10 +86,7 @@ class App extends Component {
     const { isLoggedIn, userRole, cartCount } = this.state;
     return (
       <Router>
-        <NavBar
-          isLoggedIn={isLoggedIn}
-          cartCount={cartCount}
-        ></NavBar>
+        <NavBar isLoggedIn={isLoggedIn} cartCount={cartCount}></NavBar>
 
         <Switch>
           <Route path="/" exact component={Home} />

@@ -121,12 +121,14 @@ class Login extends Component {
   //update the cart count whenever a user logged in
   updateCount = () => {
     var orders = JSON.parse(localStorage.getItem("orders"));
+    if(orders){
     var orderIndex = getCurrentUserOrder();
     var currentUserData = orders[orderIndex];
     if (currentUserData) {
       this.setState({ order: currentUserData.products });
       this.props.calculateCartCount(currentUserData.products.length);
     }
+  }
   };
   updateUrl() {
     const searchParams = new URLSearchParams();
